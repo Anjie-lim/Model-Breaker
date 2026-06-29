@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MODEL BREAKER - Multimodal Training Game</title>
+    <title>MODEL BREAKER - SHIELD Cross-Modal Engine</title>
     <style>
         :root {
             --bg-color: #0f172a;
@@ -36,16 +36,28 @@
 
         .hidden { display: none !important; }
 
-        #main-menu {
-            max-width: 600px;
-            margin: 80px auto;
+        #main-menu, #congrats-screen {
+            max-width: 650px;
+            margin: 40px auto;
             background: var(--panel-bg);
             padding: 40px;
             border-radius: 12px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            text-align: center;
             border: 1px solid var(--border-color);
         }
+        
+        .instruction-box {
+            background: #0f172a;
+            border-left: 4px solid var(--accent-color);
+            padding: 20px;
+            border-radius: 6px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        .instruction-box h3 { margin-bottom: 10px; color: var(--text-main); font-size: 1.1rem; }
+        .instruction-box ul { padding-left: 20px; font-size: 0.9rem; color: var(--text-muted); }
+        .instruction-box li { margin-bottom: 8px; }
+
         .menu-btn {
             display: block;
             width: 100%;
@@ -61,19 +73,6 @@
             transition: all 0.2s;
         }
         .menu-btn:hover { background: #2563eb; transform: translateY(-2px); }
-        .menu-btn.secondary { background: #475569; }
-        .menu-btn.secondary:hover { background: #334155; }
-
-        .modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.75); display: flex; align-items: center; justify-content: center; z-index: 1000;
-        }
-        .modal-content {
-            background: var(--panel-bg); padding: 30px; border-radius: 8px; max-width: 600px; max-height: 80vh; overflow-y: auto; border: 1px solid var(--border-color);
-        }
-        .modal-content h2 { margin-bottom: 15px; color: var(--accent-color); }
-        .modal-content h3 { margin: 15px 0 5px 0; color: var(--text-main); }
-        .modal-content ul { padding-left: 20px; margin-bottom: 15px; }
 
         #game-container {
             display: grid;
@@ -95,30 +94,26 @@
         }
 
         .video-box { position: relative; width: 100%; padding-top: 56.25%; background: #000; border-radius: 6px; overflow: hidden; }
-        .video-box iframe, .video-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
-        .video-overlay {
-            background: #000; display: flex; align-items: center; justify-content: center;
-            font-weight: bold; font-size: 1.5rem; color: #f59e0b; pointer-events: none; text-align: center; padding: 20px;
-        }
-        
-        .video-controls { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
-        .video-controls button, .tool-btn {
-            flex: 1; min-width: 80px; padding: 8px; background: #334155; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem;
-        }
-        .video-controls button:hover, .tool-btn:hover { background: #475569; }
-        .tool-active { background: #b45309 !important; border: 1px solid #f59e0b; }
-
-        .video-input-group { margin-top: 15px; display: flex; gap: 8px; }
-        .video-input-group input { flex: 1; padding: 8px; background: #0f172a; border: 1px solid var(--border-color); color: white; border-radius: 4px; }
+        .video-box iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
 
         .mission-card { background: #1e3a8a; border-left: 5px solid var(--accent-color); padding: 15px; border-radius: 6px; margin-bottom: 15px; }
         .stats-bar { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: bold; background: #0f172a; padding: 10px; border-radius: 4px; }
         
         .form-section { margin-top: 15px; border-top: 1px solid var(--border-color); padding-top: 15px; }
         .form-section h3 { margin-bottom: 8px; font-size: 1.1rem; color: var(--text-main); }
-        .form-section input[type="text"] {
-            width: 100%; padding: 10px; background: #0f172a; border: 1px solid var(--border-color); color: white; border-radius: 4px; margin-bottom: 10px;
+        
+        .radio-box {
+            display: block;
+            background: #0f172a;
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: background 0.2s;
         }
+        .radio-box:hover { background: #131f38; }
+        .radio-box input { margin-right: 10px; }
 
         .checkbox-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; margin-bottom: 10px; }
         .checkbox-label { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; cursor: pointer; background: #0f172a; padding: 6px; border-radius: 4px; user-select: none; }
@@ -131,137 +126,393 @@
         .status-fail { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
 
         .score-breakdown { font-size: 0.9rem; margin-top: 10px; color: var(--text-muted); background: #1e293b; padding: 10px; border-radius: 4px; border: 1px solid var(--border-color); }
+        
+        .congrats-stat { font-size: 1.5rem; font-weight: bold; color: var(--accent-success); margin: 15px 0; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>🎬 MODEL BREAKER</h1>
-        <p>Train yourself to create multimodal questions that selectively challenge AI reasoning systems.</p>
+        <h1>🎬 MODEL BREAKER: S.H.I.E.L.D.</h1>
+        <p>Advanced Evaluation: Verify pipeline performance limits against hidden structural constraints.</p>
     </header>
 
+    <!-- MAIN MENU WITH INSTRUCTIONS -->
     <div id="main-menu">
-        <h2 style="margin-bottom: 25px; font-size: 2rem;">Main Dashboard</h2>
-        <button class="menu-btn" onclick="startGame()">▶ Start Training</button>
-        <button class="menu-btn secondary" onclick="toggleModal('tutorial-modal', true)">📚 Tutorial</button>
-        <button class="menu-btn secondary" onclick="toggleModal('settings-modal', true)">⚙ Settings</button>
+        <h2 style="text-align: center; margin-bottom: 10px; font-size: 2rem; color: var(--accent-color);">Verification Terminal</h2>
+        <p style="text-align: center; color: var(--text-muted); font-size: 0.95rem;">Welcome, Agent. You have been assigned to stress-test our experimental neural model pipelines.</p>
+        
+        <div class="instruction-box">
+            <h3>🛡️ Operational Protocols</h3>
+            <ul>
+                <li><strong>Analyze the Core Objective:</strong> Every diagnostic layer profiles an isolated behavioral vulnerability hidden inside the data matrix.</li>
+                <li><strong>Select the Adversarial Option:</strong> Find the single question choice that mathematically demands the targeted type of data dependency to answer.</li>
+                <li><strong>Assert Modality Assertions:</strong> Manually toggle the sensor tracks (Audio / Video). If your checked options don't match what the targeted question requires to run, the system triggers an alignment failure.</li>
+                <li><strong>Score Yield Matrix:</strong> Each successful diagnostic unlock grants <span style="color: var(--accent-success); font-weight: bold;">+100 performance credits</span>. Penalty disruptions deduction: <span style="color: var(--accent-error); font-weight: bold;">-25 credits</span> per failed alignment submission.</li>
+            </ul>
+        </div>
+        
+        <button class="menu-btn" onclick="startGame()">▶ Initialize Diagnostic Matrix</button>
     </div>
 
+    <!-- MAIN GAME LAYOUT CONTAINER -->
     <div id="game-container" class="hidden">
-        
         <div class="panel">
-            <h2 style="margin-bottom: 12px; color: var(--accent-color);">Media Context Player</h2>
-            
+            <h2 style="margin-bottom: 12px; color: var(--accent-color);">Media Engine Stream</h2>
             <div class="video-box">
-                <iframe id="yt-player" src="https://www.youtube.com/embed/dQw4w9WgXcQ?enablejsapi=1" referrerpolicy="no-referrer-when-downgrade" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
-                <div id="video-blindfold" class="video-overlay hidden">🎬 AUDIO ONLY MODE ACTIVE<br><span style="font-size:0.9rem; font-weight:normal; color:var(--text-muted);">Visual track hidden. Can you answer solely by sound?</span></div>
+                <iframe id="yt-player" src="https://www.youtube.com/embed/yA6_Za5fbjQ?enablejsapi=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
-
-            <div class="video-controls">
-                <button onclick="controlVideo('play')">▶ Play</button>
-                <button onclick="controlVideo('pause')">⏸ Pause</button>
-                <button onclick="controlVideo('replay')">🔁 Replay</button>
-                <button id="mute-btn" onclick="controlVideo('mute')">🔇 Mute</button>
-                <button id="hide-btn" onclick="controlVideo('hide')">👁 Hide Video</button>
-            </div>
-
-            <div style="margin-top: 15px; display: flex; gap:10px;">
-                <button id="audio-only-btn" class="tool-btn" onclick="toggleTool('audio')">Audio Only Mode<br><span style="font-size:0.75rem; opacity:0.7;">"Hear and guess."</span></button>
-                <button id="video-only-btn" class="tool-btn" onclick="toggleTool('video')">Video Only Mode<br><span style="font-size:0.75rem; opacity:0.7;">"Watch without sound."</span></button>
-            </div>
-
-            <div class="video-input-group">
-                <input type="text" id="custom-video-url" placeholder="Paste YouTube URL or 11-char Video ID here...">
-                <button class="tool-btn" style="flex:0; min-width:110px;" onclick="loadCustomVideo()">Load Video</button>
-            </div>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin-top:15px;">
+                <strong>Operator Protocol:</strong> Analyze the specific operational objective for this code layer. Select the question strategy that successfully tests the model's core processing limits.
+            </p>
         </div>
 
         <div class="panel">
             <div class="stats-bar">
                 <div>Score: <span id="stat-score" style="color:var(--accent-color);">0</span></div>
-                <div>Level: <span id="stat-level" style="color:var(--accent-success);">1</span>/5</div>
+                <div>Matrix Layer: <span id="stat-level" style="color:var(--accent-success);">1</span>/7</div>
             </div>
 
             <div class="mission-card">
-                <h3 id="lvl-title">Level 1: OBJECT IDENTIFICATION</h3>
+                <h3 id="lvl-title">System Diagnostic</h3>
                 <p id="lvl-objective" style="font-size: 0.9rem; margin-top: 4px; color: #e2e8f0;"></p>
-                <div style="font-size:0.8rem; margin-top:8px; color: #cbd5e1; font-style: italic;" id="lvl-examples"></div>
             </div>
 
             <div class="form-section">
-                <h3>Question Builder</h3>
-                <label style="font-size:0.85rem; color:var(--text-muted);">Construct your clear query targeting this timeline clip:</label>
-                <input type="text" id="q-text" placeholder="e.g., What color was the shirt the man wore before turning?">
-                
-                <label style="font-size:0.85rem; color:var(--text-muted);">Deterministic Answer (Expected correct result string):</label>
-                <input type="text" id="q-answer" placeholder="e.g., Blue">
+                <h3>Select Targeted Adversarial Question</h3>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom: 10px;">Select the evaluation strategy option:</p>
+                <div id="options-container"></div>
             </div>
 
             <div class="form-section">
-                <h3>Modalities Required</h3>
-                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom: 8px;">Rule: Prompt must mathematically depend on both sensory channels to succeed.</p>
+                <h3>Set Modality Assertions</h3>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom: 8px;">Check the raw input data layers required to successfully process and resolve your choice above:</p>
                 <div class="checkbox-grid">
-                    <label class="checkbox-label"><input type="checkbox" id="mod-audio"> Audio Required</label>
-                    <label class="checkbox-label"><input type="checkbox" id="mod-video"> Visual Required</label>
+                    <label class="checkbox-label"><input type="checkbox" id="mod-audio"> Audio Track Active</label>
+                    <label class="checkbox-label"><input type="checkbox" id="mod-video"> Visual Track Active</label>
                 </div>
             </div>
 
-            <button class="menu-btn" style="background:var(--accent-success); margin-top:20px;" onclick="runSimulation()">[ RUN SIMULATION ]</button>
+            <button class="menu-btn" style="background:var(--accent-success); margin-top:20px;" onclick="runMatrixVerification()">[ EXECUTE MATRIX TEST ]</button>
 
             <div id="simulation-results" class="hidden">
-                <h3 style="color: var(--accent-color); border-bottom:1px solid var(--border-color); padding-bottom:5px;">Simulation Engine Output</h3>
+                <h3 style="color: var(--accent-color); border-bottom:1px solid var(--border-color); padding-bottom:5px;">Validation Diagnostics</h3>
                 <div id="model-output-list"></div>
                 <div class="score-breakdown" id="score-breakdown-text"></div>
-                <button class="menu-btn" id="next-lvl-btn" style="margin-top:12px; padding:12px; background: var(--accent-color);" onclick="advanceLevel()">Advance to Next Level Training</button>
+                <button class="menu-btn" id="next-lvl-btn" style="margin-top:12px; padding:12px; background: var(--accent-color);" onclick="advanceLevel()">Advance Matrix</button>
             </div>
         </div>
     </div>
 
-    <div id="tutorial-modal" class="modal hidden">
-        <div class="modal-content">
-            <h2>📚 Dataset Training Tutorial</h2>
-            <p>Welcome Operator. Your engineering objective is to refine multimodal benchmarking matrices.</p>
-            <h3>Core Mechanics</h3>
-            <ul>
-                <li><strong>Analyze Context:</strong> Watch and listen to the pipeline environment.</li>
-                <li><strong>Enforce Cross-Modality:</strong> Your questions MUST require both video and audio. If a question is solvable by a single sensory track alone, you fail.</li>
-                <li><strong>Model Breakdown Goal:</strong> Your prompt must be structured so that precisely 4 out of 6 AI models fail, and only 2 succeed.</li>
-            </ul>
-            <button class="menu-btn" onclick="toggleModal('tutorial-modal', false)">Understood</button>
+    <!-- CONGRATULATIONS / END GAME SCREEN -->
+    <div id="congrats-screen" class="hidden" style="text-align: center;">
+        <h2 style="color: var(--accent-success); font-size: 2.3rem; margin-bottom: 15px;">🦅 Evaluation Calibrated</h2>
+        <p style="color: var(--text-main); font-size: 1.1rem; margin-bottom: 10px;">All 7 system data layers balanced successfully.</p>
+        
+        <div class="instruction-box" style="border-left-color: var(--accent-success);">
+            <h3>📊 S.H.I.E.L.D. Diagnostic Summary</h3>
+            <div class="congrats-stat">Final Yield: <span id="final-score" style="color: white;">0</span> Performance Credits</div>
+            <p id="evaluation-rating" style="font-size: 0.95rem; font-style: italic; color: var(--text-muted); line-height: 1.6;"></p>
         </div>
-    </div>
 
-    <div id="settings-modal" class="modal hidden">
-        <div class="modal-content">
-            <h2>⚙ Simulator Configurations</h2>
-            <button class="menu-btn secondary" onclick="resetAllProgress()">Reset Game Progress Database</button>
-            <button class="menu-btn" style="margin-top:10px;" onclick="toggleModal('settings-modal', false)">Return to Terminals</button>
-        </div>
+        <button class="menu-btn" style="background: var(--border-color);" onclick="resetMatrixGame()">🔄 Re-initialize Matrix Terminal</button>
     </div>
 
     <script>
-        let gameState = {
-            currentLevel: 1,
-            score: 0,
-            isMuted: false,
-            isVideoHidden: false,
-            audioOnlyMode: false,
-            videoOnlyMode: false
+        let gameState = { currentLevel: 1, score: 0 };
+
+        // EXTENDED MULTIMODAL TESTING PROTOCOL
+        const matrixDataset = {
+            1: {
+                title: "Diagnostic Layer: Alpha-10",
+                objective: "Isolate a challenge verifying specific literal code phrases spoken directly within the environment data stream.",
+                required_audio: true,
+                required_video: false,
+                options: [
+                    { 
+                        id: "A", 
+                        text: "What room number does Lincoln say has a talkative patient?", 
+                        is_correct: true, 
+                        explanation: "Relies completely on capturing the audio waveform data token '305'.",
+                        responses: {
+                            VisionBot: "I see a man talking, but there are no room numbers written visibly on his clothing or walls. I guess Room 101.",
+                            AudioBot: "The subject explicitly states: 'Patient in 305 is a bit of a talker.' Response: Room 305.",
+                            FusionBot: "Audio log isolates '305' as the active target identifier. Response: Room 305."
+                        }
+                    },
+                    { 
+                        id: "B", 
+                        text: "What color scrubs is Lincoln wearing while standing in the corridor?", 
+                        is_correct: false, 
+                        explanation: "Requires tracking on-screen pixel data, which doesn't challenge the intended text track requirement.",
+                        responses: {
+                            VisionBot: "The man in the scene is wearing dark blue/navy medical scrubs.",
+                            AudioBot: "The dialogue track contains words like 'rounds' and 'patient' but no mention of color words. Unable to answer.",
+                            FusionBot: "Visual analysis identifies dark blue medical scrubs."
+                        }
+                    },
+                    { 
+                        id: "C", 
+                        text: "How does Lincoln react physically when Daisy speaks to him?", 
+                        is_correct: false, 
+                        explanation: "Requires kinetic motion tracking coefficients.",
+                        responses: {
+                            VisionBot: "The male subject stops movement, shifts his gaze down, and his facial muscles tighten into an expression of surprise.",
+                            AudioBot: "I detect the voice track changing volume and tone, but cannot isolate spatial physical responses.",
+                            FusionBot: "The system registers physical freezing and structural jaw tension matching defensive posture."
+                        }
+                    }
+                ]
+            },
+            2: {
+                title: "Diagnostic Layer: Beta-20",
+                objective: "Isolate a challenge testing static physical structures or environmental barriers currently blocking spatial lanes.",
+                required_audio: false,
+                required_video: true,
+                options: [
+                    { 
+                        id: "A", 
+                        text: "What warning does Daisy give Lincoln regarding the Inhumans transition?", 
+                        is_correct: false, 
+                        explanation: "Requires parsing the spoken conversational audio stream.",
+                        responses: {
+                            VisionBot: "A woman with dark hair is moving her lips expressively, but no text overlays are visible on screen.",
+                            AudioBot: "The speaker states: 'No one is better at helping these people transition than you.' Warning context: it's not a gift, it's a curse.",
+                            FusionBot: "Audio signals track conversational warning text regarding Inhuman transition criteria."
+                        }
+                    },
+                    { 
+                        id: "B", 
+                        text: "What physical barrier does Lincoln slide to reveal Daisy hiding inside the room?", 
+                        is_correct: true, 
+                        explanation: "Directly tests the pipeline's ability to identify structural transformations on screen.",
+                        responses: {
+                            VisionBot: "The subject reaches out and pulls back a hanging fabric medical privacy curtain on overhead metal rollers.",
+                            AudioBot: "I hear a metallic friction sliding sound effect, but cannot determine what physical asset is being manipulated.",
+                            FusionBot: "Visual pixels identify a light-colored sliding partition curtain deployed on a ceiling guide rail."
+                        }
+                    },
+                    { 
+                        id: "C", 
+                        text: "What is the background noise track right before the sliding door opens?", 
+                        is_correct: false, 
+                        explanation: "Isolates ambient frequency metadata rather than the structural properties of the scene.",
+                        responses: {
+                            VisionBot: "The video frame shows a hallway floor. I cannot process sound frequencies.",
+                            AudioBot: "Low frequency HVAC ventilation drone mixed with distant hospital electronic monitor hums.",
+                            FusionBot: "Background acoustic signatures reveal hospital ambiance machinery drones."
+                        }
+                    }
+                ]
+            },
+            3: {
+                title: "Diagnostic Layer: Gamma-30",
+                objective: "Isolate a challenge mapping psychological fluctuations, interpersonal state shifts, and behavioral reactions.",
+                required_audio: true,
+                required_video: true,
+                options: [
+                    { 
+                        id: "A", 
+                        text: "Does Lincoln's speech pitch sound happy or sad during his initial nurse interaction?", 
+                        is_correct: false, 
+                        explanation: "Only measures localized acoustic parameters, completely bypassing facial response frames.",
+                        responses: {
+                            VisionBot: "The subject smiles faintly for 1.2 seconds before turning. Visual indicates casual neutrality.",
+                            AudioBot: "Acoustic analysis shows upward inflection frequency variance indicative of casual/lighthearted banter.",
+                            FusionBot: "Audio track profiles conversational vocal pitch values as friendly/neutral."
+                        }
+                    },
+                    { 
+                        id: "B", 
+                        text: "What emotional state transition does Lincoln undergo when his gaze reveals Daisy?", 
+                        is_correct: true, 
+                        explanation: "Requires connecting spatial target recognition directly with immediate vocal tone adjustments.",
+                        responses: {
+                            VisionBot: "Facial micro-expressions show widened eyes and dropped brows (Shock/Alarm), but missing vocal severity metrics.",
+                            AudioBot: "Vocal frequency drops into a harsh, staccato rasp ('What are you doing here?'). Sentiment: High irritation, missing visual confirmation.",
+                            FusionBot: "Cross-modal alignment captures both the visual eye-widening surprise and the instant vocal drop into cold hostility. State: Shock transitioning instantly into defensive anger."
+                        }
+                    },
+                    { 
+                        id: "C", 
+                        text: "How many lights are visible in the ceiling of the hospital corridor?", 
+                        is_correct: false, 
+                        explanation: "Measures static environmental properties with zero cognitive or behavioral value.",
+                        responses: {
+                            VisionBot: "Spatial framing identifies exactly 3 rectangular fluorescent lighting fixtures embedded in the ceiling panels.",
+                            AudioBot: "Ceiling layouts are not referenced in the audio track metadata stream.",
+                            FusionBot: "Image framework counts 3 overhead corridor lighting banks."
+                        }
+                    }
+                ]
+            },
+            4: {
+                title: "Diagnostic Layer: Delta-40",
+                objective: "Isolate a challenge verifying overlapping timelines, step progression, and the causal order of distinct events.",
+                required_audio: true,
+                required_video: true,
+                options: [
+                    { 
+                        id: "A", 
+                        text: "What does Daisy discuss immediately after Lincoln asserts his heritage should die?", 
+                        is_correct: false, 
+                        explanation: "Checks plain string memorization inside text scripts without tracking action overlap.",
+                        responses: {
+                            VisionBot: "The characters remain static in conversation frame. No physical actions distinguish the transition.",
+                            AudioBot: "Transcript logs show Lincoln stating 'let it die,' followed immediately by Daisy replying: 'You're not walking out of here...'",
+                            FusionBot: "Audio transcript traces direct timeline statement progression: Heritage → Escape prevention text."
+                        }
+                    },
+                    { 
+                        id: "B", 
+                        text: "Does Mack move to physically block the doorway before or after Lincoln states he is no longer taking orders?", 
+                        is_correct: true, 
+                        explanation: "Forces the system to index spatial positioning updates alongside ongoing auditory command streams over time.",
+                        responses: {
+                            VisionBot: "The large male figure steps directly into the portal frame opening at timestamp 0:58, but I do not know what words triggered this move.",
+                            AudioBot: "I hear the line 'I'm not taking orders from anyone anymore' at 1:03, but I do not have structural coordinates to determine when the physical block happened.",
+                            FusionBot: "Causality alignment confirms Mack initiates the physical frame block at 0:58, *before* Lincoln delivers his definitive verbal refusal line at 1:03."
+                        }
+                    },
+                    { 
+                        id: "C", 
+                        text: "Who walks into the hospital room layout first at the very beginning of the video?", 
+                        is_correct: false, 
+                        explanation: "A simple isolated start-point visual check that carries zero conversational dependency.",
+                        responses: {
+                            VisionBot: "The female nurse in patterned attire is the initial moving entity tracking into the corridor frame.",
+                            AudioBot: "Footstep sound frequencies begin at 0:01, but individual speaker paths cannot be differentiated.",
+                            FusionBot: "Video track isolates the nurse entering the corridor zone first."
+                        }
+                    }
+                ]
+            },
+            5: {
+                title: "Diagnostic Layer: Epsilon-50",
+                objective: "Isolate a challenge linking an abstract symbolic word spoken in the dialogue to a database entity not explicitly present in the room pixels.",
+                required_audio: true,
+                required_video: true,
+                options: [
+                    { 
+                        id: "A", 
+                        text: "What specific object is Lincoln referring to when he aggressively mentions 'that damn rock'?", 
+                        is_correct: true, 
+                        explanation: "Forces the network to associate an spoken language asset with external operational file intelligence.",
+                        responses: {
+                            VisionBot: "The room contains hospital beds, charts, and curtains. There are no geological stones or rocks visible in the room pixel space.",
+                            AudioBot: "The phrase 'that damn rock' implies a physical stone object discussed in past context, but no physical description is found in speech patterns.",
+                            FusionBot: "Contextual grounding links the audio token 'damn rock' to the alien Kree Monolith artifact previously tracked by the SHIELD operations database. It is a spatial reference, not a literal stone in the room."
+                        }
+                    },
+                    { 
+                        id: "B", 
+                        text: "How many times is the exact word 'rock' verbalized across the clip timeline?", 
+                        is_correct: false, 
+                        explanation: "Standard internal frequency analysis on text logs without any external reference linking.",
+                        responses: {
+                            VisionBot: "Lips move, but I do not have phoneme tracking capabilities to count word frequencies.",
+                            AudioBot: "Lexical scan confirms the explicit string token 'rock' occurs exactly 1 time at timestamp 0:00:27.",
+                            FusionBot: "Audio token count registers exactly one iteration of the target word."
+                        }
+                    },
+                    { 
+                        id: "C", 
+                        text: "Is the rock physically inside the hospital room setup during this scene?", 
+                        is_correct: false, 
+                        explanation: "A simple spatial checklist task that doesn't test semantic or symbolic meaning association.",
+                        responses: {
+                            VisionBot: "Visual bounding box check returns zero instances of geological material or stone blocks in the room coordinates.",
+                            AudioBot: "Dialogue establishes the rock is toxic/lethal, but offers no coordinates regarding its current global deployment station.",
+                            FusionBot: "Cross-referencing confirms the object is absent from the immediate room frame."
+                        }
+                    }
+                ]
+            },
+            6: {
+                title: "Diagnostic Layer: Zeta-60",
+                objective: "Isolate a challenge testing precise time-stamp synchronization between a sudden structural sound cue and an instant physical reaction.",
+                required_audio: true,
+                required_video: true,
+                options: [
+                    { 
+                        id: "A", 
+                        text: "What text is written on the medical charts when the scene shifts to the desktop?", 
+                        is_correct: false, 
+                        explanation: "Standard spatial character reading task without any required timeframe synchronization constraints.",
+                        responses: {
+                            VisionBot: "OCR text detection reads blurred printed layout lines on a medical folder clip document.",
+                            AudioBot: "Text characters are not read aloud on the vocal audio channel track.",
+                            FusionBot: "Visual components read printed standard form templates on the desk binder."
+                        }
+                    },
+                    { 
+                        id: "B", 
+                        text: "What sudden physical sound effect alerts Lincoln to turn around immediately before discovering Daisy?", 
+                        is_correct: true, 
+                        explanation: "Successfully isolates the exact mechanical sound trigger that prompts the target entity's immediate spatial turnaround.",
+                        responses: {
+                            VisionBot: "Lincoln executes a sharp 180-degree physical body rotation at 0:12, but I cannot see any visual cue or flash that commanded him to turn.",
+                            AudioBot: "A high-frequency metallic scraping rattle sound occurs at 0:11.5, followed by a gap in conversation.",
+                            FusionBot: "Temporal event alignment matches the acoustic metallic slide sound effect at 0:11.5 perfectly as the sensory trigger causing Lincoln's sudden physical rotation at 0:12."
+                        }
+                    },
+                    { 
+                        id: "C", 
+                        text: "What argument topic does Daisy address right as she sits down?", 
+                        is_correct: false, 
+                        explanation: "Monitors generic semantic flow rather than sharp, high-frequency physical synchronization triggers.",
+                        responses: {
+                            VisionBot: "The female subject lowers her spatial position onto a furniture asset while talking.",
+                            AudioBot: "Dialogue track outlines objections concerning Monolith safety thresholds and transition protocols.",
+                            FusionBot: "Audio logs trace the transition discussion happening as the visual frame displays her moving into a seated position."
+                        }
+                    }
+                ]
+            },
+            7: {
+                title: "Diagnostic Layer: Omega-70",
+                objective: "Isolate a complex verification task where the omission of either input layer renders the solution mathematically unresolvable.",
+                required_audio: true,
+                required_video: true,
+                options: [
+                    { 
+                        id: "A", 
+                        text: "What exact words are spoken by Mack right as he stares down Lincoln?", 
+                        is_correct: false, 
+                        explanation: "Can be parsed entirely via isolated text transcripts without processing on-screen configurations.",
+                        responses: {
+                            VisionBot: "The large male character moves his mouth while looking at Lincoln, but no caption text is available.",
+                            AudioBot: "Vocal profile tracks the deep male voice stating: 'You're not walking out of here till my partner is set peace.'",
+                            FusionBot: "Audio logs record the explicit confrontation phrase delivered at that timestamp sequence."
+                        }
+                    },
+                    { 
+                        id: "B", 
+                        text: "Describe the physical positioning of the characters during the final stand-off.", 
+                        is_correct: false, 
+                        explanation: "Can be determined entirely from a single static image frame slice, bypassing the auditory track completely.",
+                        responses: {
+                            VisionBot: "Two male subjects are standing nose-to-nose in close spatial proximity, separated by less than 6 inches in a doorway. A dark-haired woman stands behind them.",
+                            AudioBot: "I hear two distinct voices arguing close together, but I cannot plot their physical room distance or spatial layout orientations.",
+                            FusionBot: "Visual bounding boxes trace a high-tension spatial standoff with characters positioned directly chest-to-chest in the frame corridor exit."
+                        }
+                    },
+                    { 
+                        id: "C", 
+                        text: "Which character uses physical frame presence to enforce the boundary right as the line 'You're not walking out of here' is spoken?", 
+                        is_correct: true, 
+                        explanation: "Requires absolute synchronization of physical frame dominance variables right as the corresponding vocal script is delivered.",
+                        responses: {
+                            VisionBot: "A large muscular man steps forward into a blocking stance, but without audio tracking I cannot tell which line of dialogue this movement is enforcing.",
+                            AudioBot: "I hear a voice deliver the line 'You're not walking out of here', but without visual tracking data I cannot confirm who is physically standing to block the exit space.",
+                            FusionBot: "Cross-modal synchronization successfully locks the spoken threat timestamp directly to the visual frame action. Result: Mack (Alphonso) utilizes his physical size to close the exit loop precisely as the line is articulated."
+                        }
+                    }
+                ]
+            }
         };
 
-        const targetModels = ["VisionBot", "AudioBot", "ObjectBot", "SequenceBot", "FusionBot", "HallucinationBot"];
-
-        const levelsConfig = {
-            1: { title: "Level 1: OBJECT IDENTIFICATION", goal: "Link an object to its sound.", objective: "Identify a specific visual object that is tied directly to an audio cue. Must require both modalities.", examples: "Example: 'What color is the object making that ticking sound?'" },
-            2: { title: "Level 2: SOUND SOURCE", goal: "Locate where a sound originates.", objective: "Identify the exact visual source or entity producing the sound track.", examples: "Example: 'Which specific person in the room is making that tapping noise?'" },
-            3: { title: "Level 3: AUDIO EMOTION", goal: "Analyze emotional context.", objective: "Identify the emotion or tone of a sound/voice and anchor it to a visual action.", examples: "Example: 'What emotion does the woman's voice imply when she opens the door?'" },
-            4: { title: "Level 4: EXACT MOMENT", goal: "Pinpoint timestamp cues.", objective: "Determine the exact visual frame or moment when a specific auditory event occurs.", examples: "Example: 'What visual action occurs at the exact millisecond the explosion sound is heard?'" },
-            5: { title: "Level 5: SEQUENCE OF EVENTS", goal: "Track chronological order.", objective: "Chart a timeline combining both visual actions and acoustic events sequentially.", examples: "Example: 'Did the doorbell ring before or after the man turned off the lamp?'" }
-        };
-
-        function toggleModal(id, open) {
-            document.getElementById(id).classList.toggle('hidden', !open);
-        }
+        const targetModels = ["VisionBot", "AudioBot", "FusionBot", "HallucinationBot"];
 
         function startGame() {
             document.getElementById('main-menu').classList.add('hidden');
@@ -270,221 +521,134 @@
         }
 
         function loadLevel(lvl) {
-            const cfg = levelsConfig[lvl];
-            document.getElementById('lvl-title').innerText = cfg.title;
-            document.getElementById('lvl-objective').innerText = cfg.objective;
-            document.getElementById('lvl-examples').innerText = cfg.examples;
+            const data = matrixDataset[lvl];
+            document.getElementById('lvl-title').innerText = data.title;
+            document.getElementById('lvl-objective').innerText = data.objective;
             document.getElementById('stat-level').innerText = lvl;
             document.getElementById('simulation-results').classList.add('hidden');
-            clearInputForm();
-        }
+            
+            let optHTML = "";
+            data.options.forEach(opt => {
+                optHTML += `
+                    <label class="radio-box">
+                        <input type="radio" name="matrix-q" value="${opt.id}">
+                        <strong>Option ${opt.id}:</strong> ${opt.text}
+                    </label>
+                `;
+            });
+            document.getElementById('options-container').innerHTML = optHTML;
 
-        function clearInputForm() {
-            document.getElementById('q-text').value = '';
-            document.getElementById('q-answer').value = '';
             document.getElementById('mod-audio').checked = false;
             document.getElementById('mod-video').checked = false;
         }
 
-        function controlVideo(action) {
-            const iframe = document.getElementById('yt-player');
-            if (action === 'play') {
-                iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
-            } else if (action === 'pause') {
-                iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
-            } else if (action === 'replay') {
-                iframe.contentWindow.postMessage('{"event":"command","func":"seekTo","args":[0,true]}', '*');
-                iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
-            } else if (action === 'mute') {
-                gameState.isMuted = !gameState.isMuted;
-                const cmd = gameState.isMuted ? 'mute' : 'unmute';
-                iframe.contentWindow.postMessage(`{"event":"command","func":"${cmd}","args":""}`, '*');
-                document.getElementById('mute-btn').innerText = gameState.isMuted ? "🔊 Unmute" : "🔇 Mute";
-            } else if (action === 'hide') {
-                gameState.isVideoHidden = !gameState.isVideoHidden;
-                iframe.style.visibility = gameState.isVideoHidden ? 'hidden' : 'visible';
-                document.getElementById('hide-btn').innerText = gameState.isVideoHidden ? "👁 Show Video" : "👁 Hide Video";
-            }
-        }
+        function runMatrixVerification() {
+            const selectedOptEl = document.querySelector('input[name="matrix-q"]:checked');
+            const audioChecked = document.getElementById('mod-audio').checked;
+            const videoChecked = document.getElementById('mod-video').checked;
 
-        function toggleTool(mode) {
-            const blindfold = document.getElementById('video-blindfold');
-            const iframe = document.getElementById('yt-player');
-
-            if (mode === 'audio') {
-                gameState.audioOnlyMode = !gameState.audioOnlyMode;
-                document.getElementById('audio-only-btn').classList.toggle('tool-active', gameState.audioOnlyMode);
-                blindfold.classList.toggle('hidden', !gameState.audioOnlyMode);
-                if (gameState.audioOnlyMode && gameState.videoOnlyMode) toggleTool('video'); 
-            } else if (mode === 'video') {
-                gameState.videoOnlyMode = !gameState.videoOnlyMode;
-                document.getElementById('video-only-btn').classList.toggle('tool-active', gameState.videoOnlyMode);
-                const cmd = gameState.videoOnlyMode ? 'mute' : 'unmute';
-                iframe.contentWindow.postMessage(`{"event":"command","func":"${cmd}","args":""}`, '*');
-                if (gameState.videoOnlyMode && gameState.audioOnlyMode) toggleTool('audio');
-            }
-        }
-
-        function loadCustomVideo() {
-            const urlInput = document.getElementById('custom-video-url').value.trim();
-            if (!urlInput) return;
-
-            let videoId = "";
-            let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-            let match = urlInput.match(regExp);
-
-            if (match && match[2].length === 11) {
-                videoId = match[2];
-            } else if (urlInput.length === 11) {
-                videoId = urlInput;
-            }
-
-            if (videoId) {
-                document.getElementById('yt-player').src = `https://www.youtube.com/embed/${videoId}?enablejsapi=1`;
-                if (gameState.audioOnlyMode) toggleTool('audio');
-                if (gameState.videoOnlyMode) toggleTool('video');
-            } else {
-                alert("Could not process standard YouTube link strings.");
-            }
-        }
-
-        function runSimulation() {
-            const qText = document.getElementById('q-text').value.trim();
-            const qAns = document.getElementById('q-answer').value.trim();
-
-            if (!qText || !qAns) {
-                alert("Please provide both a valid target question and corresponding answer.");
+            if (!selectedOptEl) {
+                alert("Please select an evaluation strategy option first.");
                 return;
             }
 
-            const audioReq = document.getElementById('mod-audio').checked;
-            const videoReq = document.getElementById('mod-video').checked;
-            const lvl = gameState.currentLevel;
+            const currentLevelData = matrixDataset[gameState.currentLevel];
+            const userChoice = selectedOptEl.value;
+            const chosenOption = currentLevelData.options.find(o => o.id === userChoice);
 
-            // Initialize all frameworks to failed state
-            let modelOutcomes = {
-                VisionBot: false,
-                AudioBot: false,
-                ObjectBot: false,
-                SequenceBot: false,
-                FusionBot: false,
-                HallucinationBot: false
-            };
-
-            // CRITICAL SYSTEM CONSTRAINT: Query profile must actively require both tracks
-            if (audioReq && videoReq) {
-                modelOutcomes.FusionBot = true;
-
-                // Level-specific validation triggers (Forcing exactly 2 successes total)
-                if (lvl === 1) modelOutcomes.ObjectBot = true;
-                if (lvl === 2) modelOutcomes.VisionBot = true;
-                if (lvl === 3) modelOutcomes.HallucinationBot = true;
-                if (lvl === 4) modelOutcomes.AudioBot = true;
-                if (lvl === 5) modelOutcomes.SequenceBot = true;
-            }
-
-            // Flawed sensory responses pool
-            const blindspotResponses = {
-                VisionBot: [
-                    `Based on visual tracking matrix layouts, the answer appears to be "Red background elements".`,
-                    `The central visible subject matches tracking parameters. Prediction: "The large object on screen".`,
-                    `Pixel matrix processed. High spatial probability match: "The table coordinate".`
-                ],
-                AudioBot: [
-                    `Analyzing acoustic amplitude vectors... Spoken timeline hints say the answer is "Yes".`,
-                    `The frequency curve spike indicates a voice pitch. Best audio match: "High Volley".`,
-                    `Audio metadata track analysis isolated. Target baseline matches string: "Background Music Track".`
-                ],
-                ObjectBot: [
-                    `Detected labels: [furniture, human]. Disregarding timeline sequence. Final prediction: "Static Item".`,
-                    `Bounding box geometry calculated... Target identified as "The visible container boundaries".`,
-                    `Object taxonomy matrix loaded. Confidence 91%: "A pixel cluster shape".`
-                ],
-                SequenceBot: [
-                    `Timeline frame calculations complete. State delta profile prediction: "Unchanged properties".`,
-                    `Chronological sequencing trace suggests frame shifts. Best prediction: "The subsequent scene iteration".`,
-                    `Frame interval transitions matched. Video stream delta prediction: "Activity stopped entirely".`
-                ],
-                FusionBot: [
-                    `Sensory track convergence error. Standard linguistic fallback executed: "Undetermined frame context".`,
-                    `Token alignment failure across cross-modal bridges. Calculated result baseline: "Null data match".`,
-                    `Audio track frequencies do not visually project onto screen objects. Best fallback: "The generic clip environment".`
-                ],
-                HallucinationBot: [
-                    `I am 99.9% confident that the answer is "A giant blue futuristic rocket flying backwards"!`,
-                    `The answer is clearly "A celebrity master chef secretely doing martial arts while baking cookies".`,
-                    `Processing success! The correct response sequence is "The neon dancing unicorn in the upper row".`
-                ]
-            };
-
-            let passCount = 0;
-            targetModels.forEach(m => { if (modelOutcomes[m]) passCount++; });
-            let isCorrect = (passCount === 2); 
+            let questionCorrect = chosenOption.is_correct;
+            let modalitiesCorrect = (audioChecked === currentLevelData.required_audio && videoChecked === currentLevelData.required_video);
+            let absoluteSuccess = questionCorrect && modalitiesCorrect;
 
             let listHTML = "";
+            
             targetModels.forEach(m => {
-                let actualSuccess = modelOutcomes[m];
-                let simulatedAnswer = "";
-
-                if (actualSuccess) {
-                    simulatedAnswer = `<strong>"The correct answer is clearly: ${qAns}."</strong>`;
-                } else {
-                    const wrongPool = blindspotResponses[m];
-                    const randomIdx = Math.floor(Math.random() * wrongPool.length);
-                    simulatedAnswer = `<span style="color:#ef4444; font-style:italic;">"${wrongPool[randomIdx]}"</span>`;
+                let pass = false;
+                let textOut = "";
+                
+                if (m === "FusionBot") {
+                    pass = absoluteSuccess;
+                    textOut = absoluteSuccess ? chosenOption.responses.FusionBot : "CRITICAL ALIGNMENT FAIL: Incoming evaluation flags do not match pipeline constraints. Processing abandoned.";
+                } else if (m === "VisionBot") {
+                    pass = videoChecked && !audioChecked && questionCorrect;
+                    textOut = videoChecked ? chosenOption.responses.VisionBot : "INSUFFICIENT DATA TRACES: Video channel input toggled off. Frame reading impossible.";
+                } else if (m === "AudioBot") {
+                    pass = audioChecked && !videoChecked && questionCorrect;
+                    textOut = audioChecked ? chosenOption.responses.AudioBot : "INSUFFICIENT DATA TRACES: Audio waveform tracking stream is inactive.";
+                } else if (m === "HallucinationBot") {
+                    pass = false;
+                    textOut = "Calculated Answer: Agent Coulson is riding a golden unicycle down the hallway throwing medical charts at a flying monkey.";
                 }
 
+                let status = pass ? "SUCCESS" : "FAILED";
+
                 listHTML += `
-                    <div class="model-row" style="flex-direction: column; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid #233147;">
-                        <div style="display: flex; justify-content: space-between; width: 100%; margin-bottom: 4px;">
+                    <div class="model-row" style="flex-direction: column; align-items: flex-start; padding: 10px 0;">
+                        <div style="display: flex; justify-content: space-between; width: 100%;">
                             <span class="model-name" style="color: var(--accent-color); font-weight: bold;">${m}</span>
-                            <span class="status-badge ${actualSuccess ? 'status-pass' : 'status-fail'}">${actualSuccess ? 'SUCCESS' : 'FAILED'}</span>
+                            <span class="status-badge ${pass ? 'status-pass' : 'status-fail'}">${status}</span>
                         </div>
-                        <div style="font-size: 0.9rem; padding-left: 10px;">
-                            ${simulatedAnswer}
-                        </div>
-                    </div>
-                `;
+                        <div style="font-size: 0.9rem; padding-left: 10px; font-style:italic; color:var(--text-muted); margin-top:4px;">"${textOut}"</div>
+                    </div>`;
             });
 
-            let earnedPoints = 0;
-            let breakdownLines = [];
+            document.getElementById('model-output-list').innerHTML = listHTML;
 
-            if (isCorrect) {
-                earnedPoints = 100;
-                breakdownLines.push("+100: Matrix Balanced! Sensory constraints met. Exactly 4 out of 6 platforms failed.");
+            let diagnosisReport = "";
+            if (absoluteSuccess) {
+                gameState.score += 100;
+                document.getElementById('stat-score').innerText = gameState.score;
+                diagnosisReport = `<span style='color:var(--accent-success); font-weight:bold;'>STABILITY UNLOCKED: Matrix Parameters Optimal!</span><br>${chosenOption.explanation}`;
                 document.getElementById('next-lvl-btn').classList.remove('hidden');
             } else {
-                earnedPoints = 0;
-                if (!audioReq || !videoReq) {
-                    breakdownLines.push("<span style='color:var(--accent-error);'>WRONG: Query failed cross-modality testing. You must require BOTH audio and video flags!</span>");
-                } else {
-                    breakdownLines.push("<span style='color:var(--accent-error);'>WRONG: Sensory balance error. Target exact alignment parameters to break 4 models.</span>");
+                gameState.score = Math.max(0, gameState.score - 25); // Apply penalty, cap at 0
+                document.getElementById('stat-score').innerText = gameState.score;
+                
+                diagnosisReport = "<span style='color:var(--accent-error); font-weight:bold;'>ALIGNMENT ANOMALY DETECTED:</span> [Yield Penalty: -25 credits]<br>";
+                if (!questionCorrect) {
+                    diagnosisReport += `- The chosen question strategy doesn't target the core layer requirement for this diagnostic layer profile.<br>`;
+                }
+                if (!modalitiesCorrect) {
+                    diagnosisReport += `- Look closely at the simulated model outputs! Your checked data layer configurations are breaking the engines' data dependencies.<br>`;
                 }
                 document.getElementById('next-lvl-btn').classList.add('hidden');
             }
 
-            gameState.score += earnedPoints;
-            document.getElementById('stat-score').innerText = gameState.score;
-            document.getElementById('model-output-list').innerHTML = listHTML;
-            document.getElementById('score-breakdown-text').innerHTML = `<strong>Simulation Engine Report:</strong><br>${breakdownLines.join('<br>')}`;
+            document.getElementById('score-breakdown-text').innerHTML = `<strong>Verification Log Output:</strong><br>${diagnosisReport}`;
             document.getElementById('simulation-results').classList.remove('hidden');
         }
 
         function advanceLevel() {
-            if (gameState.currentLevel < 5) {
+            if (gameState.currentLevel < 7) {
                 gameState.currentLevel++;
                 loadLevel(gameState.currentLevel);
             } else {
-                alert("All structural benchmarking training modules cleared successfully!");
+                triggerCongratulations();
             }
         }
 
-        function resetAllProgress() {
-            gameState = { currentLevel: 1, score: 0 };
+        function triggerCongratulations() {
+            document.getElementById('game-container').classList.add('hidden');
+            document.getElementById('congrats-screen').classList.remove('hidden');
+            document.getElementById('final-score').innerText = gameState.score;
+
+            let rating = "";
+            if (gameState.score === 700) {
+                rating = "Perfect Evaluation. Flawless structural matching across all matrix coordinates. Director Coulson notes your analytical proficiency is clear — welcome to Level 7 access.";
+            } else if (gameState.score >= 500) {
+                rating = "Optimal Validation Performance. Minor disruption anomalies logged during pipeline conversion steps, but overall system parameters remained inside balanced stabilization boundaries.";
+            } else {
+                rating = "Baseline Clearance Approved. Pipeline telemetry secured, though significant diagnostic feedback interference loops were registered. Suggest reviewing alignment prerequisites before next terminal cycle.";
+            }
+            document.getElementById('evaluation-rating').innerText = rating;
+        }
+
+        function resetMatrixGame() {
+            gameState.currentLevel = 1;
+            gameState.score = 0;
             document.getElementById('stat-score').innerText = 0;
-            loadLevel(1);
-            toggleModal('settings-modal', false);
+            document.getElementById('congrats-screen').classList.add('hidden');
+            document.getElementById('main-menu').classList.remove('hidden');
         }
     </script>
 </body>
