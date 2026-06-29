@@ -36,7 +36,6 @@
 
         .hidden { display: none !important; }
 
-        /* Main Menu Styling */
         #main-menu {
             max-width: 600px;
             margin: 80px auto;
@@ -65,7 +64,6 @@
         .menu-btn.secondary { background: #475569; }
         .menu-btn.secondary:hover { background: #334155; }
 
-        /* Modal Overlay for Info panels */
         .modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.75); display: flex; align-items: center; justify-content: center; z-index: 1000;
@@ -77,7 +75,6 @@
         .modal-content h3 { margin: 15px 0 5px 0; color: var(--text-main); }
         .modal-content ul { padding-left: 20px; margin-bottom: 15px; }
 
-        /* Gameplay Layout */
         #game-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -97,7 +94,6 @@
             border: 1px solid var(--border-color);
         }
 
-        /* Left Column Subcomponents */
         .video-box { position: relative; width: 100%; padding-top: 56.25%; background: #000; border-radius: 6px; overflow: hidden; }
         .video-box iframe, .video-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
         .video-overlay {
@@ -115,7 +111,6 @@
         .video-input-group { margin-top: 15px; display: flex; gap: 8px; }
         .video-input-group input { flex: 1; padding: 8px; background: #0f172a; border: 1px solid var(--border-color); color: white; border-radius: 4px; }
 
-        /* Right Column Setup */
         .mission-card { background: #1e3a8a; border-left: 5px solid var(--accent-color); padding: 15px; border-radius: 6px; margin-bottom: 15px; }
         .stats-bar { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: bold; background: #0f172a; padding: 10px; border-radius: 4px; }
         
@@ -128,7 +123,6 @@
         .checkbox-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; margin-bottom: 10px; }
         .checkbox-label { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; cursor: pointer; background: #0f172a; padding: 6px; border-radius: 4px; user-select: none; }
         
-        /* Simulation Dashboard Components */
         #simulation-results { margin-top: 15px; background: #0f172a; padding: 15px; border-radius: 6px; }
         .model-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #233147; }
         .model-name { font-weight: 500; }
@@ -137,8 +131,6 @@
         .status-fail { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
 
         .score-breakdown { font-size: 0.9rem; margin-top: 10px; color: var(--text-muted); background: #1e293b; padding: 10px; border-radius: 4px; border: 1px solid var(--border-color); }
-        .badge-grid-inline { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 5px; }
-        .badge-pill { background: #b45309; color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -152,7 +144,6 @@
         <h2 style="margin-bottom: 25px; font-size: 2rem;">Main Dashboard</h2>
         <button class="menu-btn" onclick="startGame()">▶ Start Training</button>
         <button class="menu-btn secondary" onclick="toggleModal('tutorial-modal', true)">📚 Tutorial</button>
-        <button class="menu-btn secondary" onclick="toggleModal('badges-modal', true)">🏆 Badges</button>
         <button class="menu-btn secondary" onclick="toggleModal('settings-modal', true)">⚙ Settings</button>
     </div>
 
@@ -183,17 +174,16 @@
                 <input type="text" id="custom-video-url" placeholder="Paste YouTube URL or 11-char Video ID here...">
                 <button class="tool-btn" style="flex:0; min-width:110px;" onclick="loadCustomVideo()">Load Video</button>
             </div>
-            <p style="font-size:0.8rem; color:var(--text-muted); margin-top:4px;">💡 <em>Tip: If videos won't load locally, launch this file using an IDE server extension like Live Server, or host it on GitHub Pages.</em></p>
         </div>
 
         <div class="panel">
             <div class="stats-bar">
                 <div>Score: <span id="stat-score" style="color:var(--accent-color);">0</span></div>
-                <div>Level: <span id="stat-level" style="color:var(--accent-success);">1</span>/8</div>
+                <div>Level: <span id="stat-level" style="color:var(--accent-success);">1</span>/5</div>
             </div>
 
             <div class="mission-card">
-                <h3 id="lvl-title">Level 1: OBSERVE</h3>
+                <h3 id="lvl-title">Level 1: OBJECT IDENTIFICATION</h3>
                 <p id="lvl-objective" style="font-size: 0.9rem; margin-top: 4px; color: #e2e8f0;"></p>
                 <div style="font-size:0.8rem; margin-top:8px; color: #cbd5e1; font-style: italic;" id="lvl-examples"></div>
             </div>
@@ -203,30 +193,17 @@
                 <label style="font-size:0.85rem; color:var(--text-muted);">Construct your clear query targeting this timeline clip:</label>
                 <input type="text" id="q-text" placeholder="e.g., What color was the shirt the man wore before turning?">
                 
-                <label style="font-size:0.85rem; color:var(--text-muted);">Deterministic Answer (Must match objective factual metrics):</label>
+                <label style="font-size:0.85rem; color:var(--text-muted);">Deterministic Answer (Expected correct result string):</label>
                 <input type="text" id="q-answer" placeholder="e.g., Blue">
             </div>
 
             <div class="form-section">
-                <h3>Information Needed Tags</h3>
-                <div class="checkbox-grid" id="tags-info">
-                    </div>
-
-                <h3 style="margin-top:10px;">Reasoning Required Tags</h3>
-                <div class="checkbox-grid" id="tags-reasoning">
-                    </div>
-
-                <h3 style="margin-top:10px;">Modalities</h3>
+                <h3>Modalities Required</h3>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom: 8px;">Rule: Prompt must mathematically depend on both sensory channels to succeed.</p>
                 <div class="checkbox-grid">
                     <label class="checkbox-label"><input type="checkbox" id="mod-audio"> Audio Required</label>
                     <label class="checkbox-label"><input type="checkbox" id="mod-video"> Visual Required</label>
                 </div>
-            </div>
-
-            <div class="form-section">
-                <h3>Predict Models (Which systems will decode this successfully?)</h3>
-                <div class="checkbox-grid" id="model-predictions">
-                    </div>
             </div>
 
             <button class="menu-btn" style="background:var(--accent-success); margin-top:20px;" onclick="runSimulation()">[ RUN SIMULATION ]</button>
@@ -243,83 +220,44 @@
     <div id="tutorial-modal" class="modal hidden">
         <div class="modal-content">
             <h2>📚 Dataset Training Tutorial</h2>
-            <p>Welcome Operator. Your engineering objective is to refine multimodal benchmarking matrices. Modern vision-language configurations often trick automated benchmarks using contextual heuristics or linguistic templates rather than pure processing.</p>
+            <p>Welcome Operator. Your engineering objective is to refine multimodal benchmarking matrices.</p>
             <h3>Core Mechanics</h3>
             <ul>
-                <li><strong>Analyze Context:</strong> Watch the current video configuration pipeline.</li>
-                <li><strong>Construct Prompts:</strong> Type a question and single definitive answer.</li>
-                <li><strong>Isolate Vectors:</strong> Check system capability indicators to configure which simulated architectures can process it successfully.</li>
-                <li><strong>Exploit Blindspots:</strong> Balance constraints across levels until achieving the ultimate "Lone Wolf" execution condition (Only FusionBot tracking success).</li>
+                <li><strong>Analyze Context:</strong> Watch and listen to the pipeline environment.</li>
+                <li><strong>Enforce Cross-Modality:</strong> Your questions MUST require both video and audio. If a question is solvable by a single sensory track alone, you fail.</li>
+                <li><strong>Model Breakdown Goal:</strong> Your prompt must be structured so that precisely 4 out of 6 AI models fail, and only 2 succeed.</li>
             </ul>
             <button class="menu-btn" onclick="toggleModal('tutorial-modal', false)">Understood</button>
-        </div>
-    </div>
-
-    <div id="badges-modal" class="modal hidden">
-        <div class="modal-content">
-            <h2>🏆 Achievement Badges Record</h2>
-            <div id="badges-display-list"></div>
-            <button class="menu-btn" style="margin-top:20px;" onclick="toggleModal('badges-modal', false)">Close Dashboard</button>
         </div>
     </div>
 
     <div id="settings-modal" class="modal hidden">
         <div class="modal-content">
             <h2>⚙ Simulator Configurations</h2>
-            <p style="margin-bottom:15px;">Adjust playback environment presets or force explicit validation vectors.</p>
             <button class="menu-btn secondary" onclick="resetAllProgress()">Reset Game Progress Database</button>
             <button class="menu-btn" style="margin-top:10px;" onclick="toggleModal('settings-modal', false)">Return to Terminals</button>
         </div>
     </div>
 
     <script>
-        // GLOBAL GAME CONTROLLER STATE
         let gameState = {
             currentLevel: 1,
             score: 0,
-            badges: {
-                loneWolf: 0,          
-                multimodalMaster: 0,  
-                speakerDetective: 0,  
-                timeTraveler: 0,      
-                stateTracker: 0      
-            },
             isMuted: false,
             isVideoHidden: false,
             audioOnlyMode: false,
             videoOnlyMode: false
         };
 
-        const infoTags = ["Object", "Person", "Action", "Speech", "Sound", "Attribute", "Event"];
-        const reasoningTags = ["Identification", "Counting", "Temporal Order", "State Change", "Speaker Attribution", "Reference Resolution", "Spatial Reasoning", "Contradiction", "Memory Across Scenes", "Event Did Not Happen"];
         const targetModels = ["VisionBot", "AudioBot", "ObjectBot", "SequenceBot", "FusionBot", "HallucinationBot"];
 
         const levelsConfig = {
-            1: { title: "Level 1: OBSERVE", goal: "Learn question basics. Target clean object detection benchmarks.", objective: "Create a question evaluating simple objects or physical visibility metrics.", examples: "Examples: 'What color was the shirt?' or 'What did the man pick up?'" },
-            2: { title: "Level 2: LISTEN", goal: "Isolate precise speech recognition and audio vectors.", objective: "Isolate data parameters that rely entirely on audible streams rather than visuals.", examples: "Examples: 'What specific phrase was stated?' or 'What ringing noise occurred?'" },
-            3: { title: "Level 3: COMBINE", goal: "Force multi-modality alignment verification.", objective: "Design verification queries requiring synchronized cross-modal visual and acoustic processing streams.", examples: "Examples: 'What color was the item mentioned?' or 'What was the woman holding when she said \"I found it\"?'" },
-            4: { title: "Level 4: PEOPLE", goal: "Map target identity tags to accurate output logs.", objective: "Challenge identity mapping capabilities across complex spatial speaker variations.", examples: "Examples: 'Who waved immediately following the vocal salutation?' or 'What item did the speaker pick up?'" },
-            5: { title: "Level 5: TIME", goal: "Incorporate non-linear chronal sequencing conditions.", objective: "Validate historical action dependencies and temporal arrangement constraints.", examples: "Examples: 'Did the alarm sequence activate prior to or following the access hatch opening?'" },
-            6: { title: "Level 6: CHANGE", goal: "Perform Delta calculations on changing physical items.", objective: "Construct a state verification pipeline charting property mutations across frames.", examples: "Examples: 'Was the container lid configuration open when physical relocation commenced?'" },
-            7: { title: "Level 7: TRICKS", goal: "Expose cognitive contradictions inside current contextual feeds.", objective: "Design cross-modal mismatch verification instances checking semantic integrity.", examples: "Examples: 'The entity gestures toward a dog but speaks the term \"cat\". Was it correct?'" },
-            8: { title: "Level 8: MASTER CHALLENGE", goal: "Execute strategic lone wolf isolation criteria.", objective: "Target deep integration matrices where Audio Required, Visual Required, and Temporal Reasoning are activated so that uniquely FusionBot solves it.", examples: "Objective Goal: Isolate FusionBot entirely to achieve the ultimate design condition!" }
+            1: { title: "Level 1: OBJECT IDENTIFICATION", goal: "Link an object to its sound.", objective: "Identify a specific visual object that is tied directly to an audio cue. Must require both modalities.", examples: "Example: 'What color is the object making that ticking sound?'" },
+            2: { title: "Level 2: SOUND SOURCE", goal: "Locate where a sound originates.", objective: "Identify the exact visual source or entity producing the sound track.", examples: "Example: 'Which specific person in the room is making that tapping noise?'" },
+            3: { title: "Level 3: AUDIO EMOTION", goal: "Analyze emotional context.", objective: "Identify the emotion or tone of a sound/voice and anchor it to a visual action.", examples: "Example: 'What emotion does the woman's voice imply when she opens the door?'" },
+            4: { title: "Level 4: EXACT MOMENT", goal: "Pinpoint timestamp cues.", objective: "Determine the exact visual frame or moment when a specific auditory event occurs.", examples: "Example: 'What visual action occurs at the exact millisecond the explosion sound is heard?'" },
+            5: { title: "Level 5: SEQUENCE OF EVENTS", goal: "Track chronological order.", objective: "Chart a timeline combining both visual actions and acoustic events sequentially.", examples: "Example: 'Did the doorbell ring before or after the man turned off the lamp?'" }
         };
-
-        window.onload = function() {
-            buildTagGrids();
-            updateBadgesDisplay();
-        };
-
-        function buildTagGrids() {
-            const infoContainer = document.getElementById('tags-info');
-            infoContainer.innerHTML = infoTags.map(tag => `<label class="checkbox-label"><input type="checkbox" value="${tag}" class="info-chk"> ${tag}</label>`).join('');
-            
-            const reasonContainer = document.getElementById('tags-reasoning');
-            reasonContainer.innerHTML = reasoningTags.map(tag => `<label class="checkbox-label"><input type="checkbox" value="${tag}" class="reason-chk"> ${tag}</label>`).join('');
-
-            const modelContainer = document.getElementById('model-predictions');
-            modelContainer.innerHTML = targetModels.map(model => `<label class="checkbox-label"><input type="checkbox" value="${model}" class="predict-chk"> ${model}</label>`).join('');
-        }
 
         function toggleModal(id, open) {
             document.getElementById(id).classList.toggle('hidden', !open);
@@ -344,12 +282,12 @@
         function clearInputForm() {
             document.getElementById('q-text').value = '';
             document.getElementById('q-answer').value = '';
-            document.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false);
+            document.getElementById('mod-audio').checked = false;
+            document.getElementById('mod-video').checked = false;
         }
 
         function controlVideo(action) {
             const iframe = document.getElementById('yt-player');
-            // PostMessage bridge pipeline to safely target standard embedding controls cross-origin
             if (action === 'play') {
                 iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
             } else if (action === 'pause') {
@@ -391,7 +329,6 @@
             const urlInput = document.getElementById('custom-video-url').value.trim();
             if (!urlInput) return;
 
-            // Highly inclusive video parsing string checks matching raw IDs, share links, or standard desk configurations
             let videoId = "";
             let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
             let match = urlInput.match(regExp);
@@ -404,11 +341,10 @@
 
             if (videoId) {
                 document.getElementById('yt-player').src = `https://www.youtube.com/embed/${videoId}?enablejsapi=1`;
-                // Clear state tools
                 if (gameState.audioOnlyMode) toggleTool('audio');
                 if (gameState.videoOnlyMode) toggleTool('video');
             } else {
-                alert("Could not process URL link pattern. Please make sure to input an explicit 11-character video ID string or standard YouTube link share address.");
+                alert("Could not process standard YouTube link strings.");
             }
         }
 
@@ -417,134 +353,136 @@
             const qAns = document.getElementById('q-answer').value.trim();
 
             if (!qText || !qAns) {
-                alert("Please provide both a valid target question and corresponding answer before running the simulation engine.");
+                alert("Please provide both a valid target question and corresponding answer.");
                 return;
             }
 
             const audioReq = document.getElementById('mod-audio').checked;
             const videoReq = document.getElementById('mod-video').checked;
-            
-            const selectedInfo = Array.from(document.querySelectorAll('.info-chk:checked')).map(c => c.value);
-            const selectedReasoning = Array.from(document.querySelectorAll('.reason-chk:checked')).map(c => c.value);
-            const predictedModels = Array.from(document.querySelectorAll('.predict-chk:checked')).map(c => c.value);
+            const lvl = gameState.currentLevel;
 
-            // Compute structural capabilities matrix rules matching your spec parameters
+            // Initialize all frameworks to failed state
             let modelOutcomes = {
-                VisionBot: videoReq && !audioReq && !selectedReasoning.includes("Speaker Attribution") && !selectedReasoning.includes("Temporal Order"),
-                AudioBot: audioReq && !videoReq,
-                ObjectBot: videoReq && !audioReq && !selectedReasoning.includes("Temporal Order") && !selectedReasoning.includes("State Change") && !selectedReasoning.includes("Reference Resolution"),
-                SequenceBot: (selectedReasoning.includes("Temporal Order") || selectedReasoning.includes("State Change")) && !audioReq,
-                FusionBot: true, 
-                HallucinationBot: !selectedReasoning.includes("Contradiction") && !selectedReasoning.includes("Event Did Not Happen")
+                VisionBot: false,
+                AudioBot: false,
+                ObjectBot: false,
+                SequenceBot: false,
+                FusionBot: false,
+                HallucinationBot: false
             };
 
-            // If a question explicitly requires both modalities, single channels immediately fail
+            // CRITICAL SYSTEM CONSTRAINT: Query profile must actively require both tracks
             if (audioReq && videoReq) {
-                modelOutcomes.VisionBot = false;
-                modelOutcomes.AudioBot = false;
-                modelOutcomes.ObjectBot = false;
-                modelOutcomes.SequenceBot = false;
+                modelOutcomes.FusionBot = true;
+
+                // Level-specific validation triggers (Forcing exactly 2 successes total)
+                if (lvl === 1) modelOutcomes.ObjectBot = true;
+                if (lvl === 2) modelOutcomes.VisionBot = true;
+                if (lvl === 3) modelOutcomes.HallucinationBot = true;
+                if (lvl === 4) modelOutcomes.AudioBot = true;
+                if (lvl === 5) modelOutcomes.SequenceBot = true;
             }
 
-            let earnedPoints = 0;
-            let breakdownLines = [];
-
-            // Compute standard scores
-            earnedPoints += 20; breakdownLines.push("+20: Objective answer text successfully logged.");
-            
-            if (audioReq) { earnedPoints += 20; breakdownLines.push("+20: Audio channel required dependency met."); }
-            if (videoReq) { earnedPoints += 20; breakdownLines.push("+20: Visual channel required dependency met."); }
-            if (selectedReasoning.length > 0) { earnedPoints += 10; breakdownLines.push("+10: Higher-order reasoning vectors logged."); }
-
-            // Handle isolated channel step penalties
-            if (videoReq && !audioReq) { earnedPoints -= 20; breakdownLines.push("-20 Penalty: Visual only bounds isolated."); }
-            if (audioReq && !videoReq) { earnedPoints -= 20; breakdownLines.push("-20 Penalty: Audio only bounds isolated."); }
+            // Flawed sensory responses pool
+            const blindspotResponses = {
+                VisionBot: [
+                    `Based on visual tracking matrix layouts, the answer appears to be "Red background elements".`,
+                    `The central visible subject matches tracking parameters. Prediction: "The large object on screen".`,
+                    `Pixel matrix processed. High spatial probability match: "The table coordinate".`
+                ],
+                AudioBot: [
+                    `Analyzing acoustic amplitude vectors... Spoken timeline hints say the answer is "Yes".`,
+                    `The frequency curve spike indicates a voice pitch. Best audio match: "High Volley".`,
+                    `Audio metadata track analysis isolated. Target baseline matches string: "Background Music Track".`
+                ],
+                ObjectBot: [
+                    `Detected labels: [furniture, human]. Disregarding timeline sequence. Final prediction: "Static Item".`,
+                    `Bounding box geometry calculated... Target identified as "The visible container boundaries".`,
+                    `Object taxonomy matrix loaded. Confidence 91%: "A pixel cluster shape".`
+                ],
+                SequenceBot: [
+                    `Timeline frame calculations complete. State delta profile prediction: "Unchanged properties".`,
+                    `Chronological sequencing trace suggests frame shifts. Best prediction: "The subsequent scene iteration".`,
+                    `Frame interval transitions matched. Video stream delta prediction: "Activity stopped entirely".`
+                ],
+                FusionBot: [
+                    `Sensory track convergence error. Standard linguistic fallback executed: "Undetermined frame context".`,
+                    `Token alignment failure across cross-modal bridges. Calculated result baseline: "Null data match".`,
+                    `Audio track frequencies do not visually project onto screen objects. Best fallback: "The generic clip environment".`
+                ],
+                HallucinationBot: [
+                    `I am 99.9% confident that the answer is "A giant blue futuristic rocket flying backwards"!`,
+                    `The answer is clearly "A celebrity master chef secretely doing martial arts while baking cookies".`,
+                    `Processing success! The correct response sequence is "The neon dancing unicorn in the upper row".`
+                ]
+            };
 
             let passCount = 0;
-            let targetedCorrectMatchCount = 0;
-            let listHTML = "";
+            targetModels.forEach(m => { if (modelOutcomes[m]) passCount++; });
+            let isCorrect = (passCount === 2); 
 
+            let listHTML = "";
             targetModels.forEach(m => {
                 let actualSuccess = modelOutcomes[m];
-                let userPredicted = predictedModels.includes(m);
-                if (actualSuccess) passCount++;
-                
-                if (actualSuccess === userPredicted) {
-                    earnedPoints += 10;
-                    targetedCorrectMatchCount++;
+                let simulatedAnswer = "";
+
+                if (actualSuccess) {
+                    simulatedAnswer = `<strong>"The correct answer is clearly: ${qAns}."</strong>`;
+                } else {
+                    const wrongPool = blindspotResponses[m];
+                    const randomIdx = Math.floor(Math.random() * wrongPool.length);
+                    simulatedAnswer = `<span style="color:#ef4444; font-style:italic;">"${wrongPool[randomIdx]}"</span>`;
                 }
 
                 listHTML += `
-                    <div class="model-row">
-                        <span class="model-name">${m}</span>
-                        <span class="status-badge ${actualSuccess ? 'status-pass' : 'status-fail'}">${actualSuccess ? 'SUCCESS' : 'FAILED'}</span>
+                    <div class="model-row" style="flex-direction: column; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid #233147;">
+                        <div style="display: flex; justify-content: space-between; width: 100%; margin-bottom: 4px;">
+                            <span class="model-name" style="color: var(--accent-color); font-weight: bold;">${m}</span>
+                            <span class="status-badge ${actualSuccess ? 'status-pass' : 'status-fail'}">${actualSuccess ? 'SUCCESS' : 'FAILED'}</span>
+                        </div>
+                        <div style="font-size: 0.9rem; padding-left: 10px;">
+                            ${simulatedAnswer}
+                        </div>
                     </div>
                 `;
             });
 
-            if (targetedCorrectMatchCount > 0) {
-                breakdownLines.push(`+${targetedCorrectMatchCount * 10}: Accurate pseudo-model outcome forecasts.`);
+            let earnedPoints = 0;
+            let breakdownLines = [];
+
+            if (isCorrect) {
+                earnedPoints = 100;
+                breakdownLines.push("+100: Matrix Balanced! Sensory constraints met. Exactly 4 out of 6 platforms failed.");
+                document.getElementById('next-lvl-btn').classList.remove('hidden');
+            } else {
+                earnedPoints = 0;
+                if (!audioReq || !videoReq) {
+                    breakdownLines.push("<span style='color:var(--accent-error);'>WRONG: Query failed cross-modality testing. You must require BOTH audio and video flags!</span>");
+                } else {
+                    breakdownLines.push("<span style='color:var(--accent-error);'>WRONG: Sensory balance error. Target exact alignment parameters to break 4 models.</span>");
+                }
+                document.getElementById('next-lvl-btn').classList.add('hidden');
             }
 
-            // Uncover Lone Wolf State Matrix
-            if (passCount === 1) {
-                earnedPoints += 20;
-                breakdownLines.push("+20: 🎯 LONE WOLF BONUS! Exactly one engine successfully broken through validation layer.");
-                gameState.badges.loneWolf++;
-            }
-
-            // Tracking Milestones Progress
-            if (audioReq && videoReq) gameState.badges.multimodalMaster++;
-            if (selectedReasoning.includes("Speaker Attribution")) gameState.badges.speakerDetective++;
-            if (selectedReasoning.includes("Temporal Order")) gameState.badges.timeTraveler++;
-            if (selectedReasoning.includes("State Change")) gameState.badges.stateTracker++;
-
-            // Global ledger assignment update
-            gameState.score += Math.max(0, earnedPoints);
+            gameState.score += earnedPoints;
             document.getElementById('stat-score').innerText = gameState.score;
-
-            // Render Results Panel
             document.getElementById('model-output-list').innerHTML = listHTML;
-            document.getElementById('score-breakdown-text').innerHTML = `<strong>Score Performance Metrics Breakdown:</strong><br>${breakdownLines.join('<br>')}`;
-            
-            updateBadgesDisplay();
+            document.getElementById('score-breakdown-text').innerHTML = `<strong>Simulation Engine Report:</strong><br>${breakdownLines.join('<br>')}`;
             document.getElementById('simulation-results').classList.remove('hidden');
         }
 
         function advanceLevel() {
-            if (gameState.currentLevel < 8) {
+            if (gameState.currentLevel < 5) {
                 gameState.currentLevel++;
                 loadLevel(gameState.currentLevel);
             } else {
-                alert("Master Challenge framework fully calibrated. Feel free to load custom video frames to continue testing boundaries.");
+                alert("All structural benchmarking training modules cleared successfully!");
             }
         }
 
-        function updateBadgesDisplay() {
-            const listContainer = document.getElementById('badges-display-list');
-            const badgeItems = [
-                { name: "🎯 Lone Wolf", desc: "Isolate precisely one processing framework to pass constraints.", count: gameState.badges.loneWolf },
-                { name: "🎬 Multimodal Master", desc: "Construct multi-layer cross-modal questions containing audio and visual criteria.", count: gameState.badges.multimodalMaster },
-                { name: "🕵 Speaker Detective", desc: "Map audio channels across unique moving spatial speakers.", count: gameState.badges.speakerDetective },
-                { name: "⏳ Time Traveler", desc: "Implement chronological structural dependency arrays.", count: gameState.badges.timeTraveler },
-                { name: "🔄 State Tracker", desc: "Log property state mutations changes sequentially.", count: gameState.badges.stateTracker }
-            ];
-
-            listContainer.innerHTML = badgeItems.map(b => `
-                <div style="background:#0f172a; padding:12px; margin:8px 0; border-radius:6px; border:1px solid var(--border-color);">
-                    <strong>${b.name}</strong> — Completed: ${b.count}<br>
-                    <span style="font-size:0.8rem; color:var(--text-muted);">${b.desc}</span>
-                </div>
-            `).join('');
-        }
-
         function resetAllProgress() {
-            gameState = {
-                currentLevel: 1, score: 0,
-                badges: { loneWolf: 0, multimodalMaster: 0, speakerDetective: 0, timeTraveler: 0, stateTracker: 0 }
-            };
+            gameState = { currentLevel: 1, score: 0 };
             document.getElementById('stat-score').innerText = 0;
-            updateBadgesDisplay();
             loadLevel(1);
             toggleModal('settings-modal', false);
         }
