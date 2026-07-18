@@ -233,11 +233,11 @@
                         id: "A", 
                         text: "What room number does Lincoln say has a talkative patient?", 
                         is_correct: true, 
-                        explanation: "This depends entirely on picking up the "305" sound from the audio.",
+                        explanation: "This depends entirely on picking up the \"305\" sound from the audio.",
                         responses: {
                             VisionBot: "I see a man talking, but there are no room numbers on his clothes or the walls, so I guess Room 101.",
-                            AudioBot: "I hear the subject say, "Patient in 305 is a bit of a talker," so I identify the location as Room 305.",
-                            FusionBot: "I isolate "305" from the audio log as the correct identifier and confirm the location is Room 305."
+                            AudioBot: "I hear the subject say, \"Patient in 305 is a bit of a talker,\" so I identify the location as Room 305.",
+                            FusionBot: "I isolate \"305\" from the audio log as the correct identifier and confirm the location is Room 305."
                         }
                     },
                     { 
@@ -277,8 +277,8 @@
                         explanation: "This needs to process and interpret the spoken audio.",
                         responses: {
                             VisionBot: "I see a dark-haired woman moving her lips expressively, but there is no on-screen text.",
-                            AudioBot: "I hear the speaker say, "No one is better at helping these people transition than you," and warn that it is a curse, not a gift.",
-                            FusionBot: "I use the audio to identify the conversation as a warning about the criteria for "Inhuman" transition."
+                            AudioBot: "I hear the speaker say, \"No one is better at helping these people transition than you,\" and warn that it is a curse, not a gift.",
+                            FusionBot: "I use the audio to identify the conversation as a warning about the criteria for \"Inhuman\" transition."
                         }
                     },
                     { 
@@ -401,7 +401,7 @@
                         responses: {
                             VisionBot: "The room contains hospital beds, charts, and curtains. But I cannot find the rock or any round object.",
                             AudioBot: "The phrase 'that damn rock' implies a physical stone object discussed in past context, but provides no physical description, making the object's identity unclear from the audio alone.",
-                            FusionBot: "I have grounded the context by linking "damn rock" to the alien Kree Monolith artifact from the SHIELD operations database, confirming it is a reference to a specific entity rather than a physical stone present in the scene."
+                            FusionBot: "I have grounded the context by linking \"damn rock\" to the alien Kree Monolith artifact from the SHIELD operations database, confirming it is a reference to a specific entity rather than a physical stone present in the scene."
                         }
                     },
                     { 
@@ -411,7 +411,7 @@
                         explanation: "This performs a standard analysis of the text logs by counting the frequency of a word, without connecting it to any external knowledge or broader context.",
                         responses: {
                             VisionBot: "Lips move, but I do not have phoneme tracking capabilities to count word frequencies. Maybe two times?",
-                            AudioBot: "A lexical scan confirms that the word "rock" is spoken exactly once at the 0:00:27 timestamp.",
+                            AudioBot: "A lexical scan confirms that the word \"rock\" is spoken exactly once at the 0:00:27 timestamp.",
                             FusionBot: "Audio token count registers exactly one iteration of the target word."
                         }
                     },
