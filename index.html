@@ -134,25 +134,25 @@
 
     <header>
         <h1>🎬 MODEL BREAKER: S.H.I.E.L.D.</h1>
-        <p>Advanced Evaluation: Verify pipeline performance limits against hidden structural constraints.</p>
+        <p>Advanced Evaluation: Challenge the model's limits against structural constraints.</p>
     </header>
 
     <!-- MAIN MENU WITH INSTRUCTIONS -->
     <div id="main-menu">
         <h2 style="text-align: center; margin-bottom: 10px; font-size: 2rem; color: var(--accent-color);">Verification Terminal</h2>
-        <p style="text-align: center; color: var(--text-muted); font-size: 0.95rem;">Welcome, Agent. You have been assigned to stress-test our experimental neural model pipelines.</p>
+        <p style="text-align: center; color: var(--text-muted); font-size: 0.95rem;">Welcome, Agent. You have been assigned to stress-test our experimental models.</p>
         
         <div class="instruction-box">
             <h3>🛡️ Operational Protocols</h3>
             <ul>
-                <li><strong>Analyze the Core Objective:</strong> Every diagnostic layer profiles an isolated behavioral vulnerability hidden inside the data matrix.</li>
-                <li><strong>Select the Adversarial Option:</strong> Find the single question choice that mathematically demands the targeted type of data dependency to answer.</li>
+                <li><strong>Analyze the Core Objective:</strong> Determine what specific vulnerability the diagnostic layer is testing.</li>
+                <li><strong>Select the Adversarial Option:</strong> Select the one question that requires that specific data to solve.</li>
                 <li><strong>Assert Modality Assertions:</strong> Manually toggle the sensor tracks (Audio / Video). If your checked options don't match what the targeted question requires to run, the system triggers an alignment failure.</li>
                 <li><strong>Score Yield Matrix:</strong> Each successful diagnostic unlock grants <span style="color: var(--accent-success); font-weight: bold;">+100 performance credits</span>. Penalty disruptions deduction: <span style="color: var(--accent-error); font-weight: bold;">-25 credits</span> per failed alignment submission.</li>
             </ul>
         </div>
         
-        <button class="menu-btn" onclick="startGame()">▶ Initialize Diagnostic Matrix</button>
+        <button class="menu-btn" onclick="startGame()">▶ Start Challenge/button>
     </div>
 
     <!-- MAIN GAME LAYOUT CONTAINER -->
@@ -163,7 +163,7 @@
                 <iframe id="yt-player" src="https://www.youtube.com/embed/yA6_Za5fbjQ?enablejsapi=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
             <p style="font-size:0.85rem; color:var(--text-muted); margin-top:15px;">
-                <strong>Operator Protocol:</strong> Analyze the specific operational objective for this code layer. Select the question strategy that successfully tests the model's core processing limits.
+                <strong>Operator Protocol:</strong> Analyze the specific goal for this code layer. Choose the question most likely to push the AI to its absolute processing capacity.
             </p>
         </div>
 
@@ -180,26 +180,26 @@
 
             <div class="form-section">
                 <h3>Select Targeted Adversarial Question</h3>
-                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom: 10px;">Select the evaluation strategy option:</p>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom: 10px;">Pick the right question type based on the goal above:</p>
                 <div id="options-container"></div>
             </div>
 
             <div class="form-section">
-                <h3>Set Modality Assertions</h3>
-                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom: 8px;">Check the raw input data layers required to successfully process and resolve your choice above:</p>
+                <h3>Mute and Screen Hidden Test</h3>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom: 8px;">Check the boxes if you think Audio/visuals or both is required to answer your question:</p>
                 <div class="checkbox-grid">
-                    <label class="checkbox-label"><input type="checkbox" id="mod-audio"> Audio Track Active</label>
-                    <label class="checkbox-label"><input type="checkbox" id="mod-video"> Visual Track Active</label>
+                    <label class="checkbox-label"><input type="checkbox" id="mod-audio"> Audio Track Active: Check this if you need to hear the answer.</label>
+                    <label class="checkbox-label"><input type="checkbox" id="mod-video"> Visual Track Active: Check this if you need to see the answer.</label>
                 </div>
             </div>
 
-            <button class="menu-btn" style="background:var(--accent-success); margin-top:20px;" onclick="runMatrixVerification()">[ EXECUTE MATRIX TEST ]</button>
+            <button class="menu-btn" style="background:var(--accent-success); margin-top:20px;" onclick="runMatrixVerification()">[ RUN TEST ]</button>
 
             <div id="simulation-results" class="hidden">
                 <h3 style="color: var(--accent-color); border-bottom:1px solid var(--border-color); padding-bottom:5px;">Validation Diagnostics</h3>
                 <div id="model-output-list"></div>
                 <div class="score-breakdown" id="score-breakdown-text"></div>
-                <button class="menu-btn" id="next-lvl-btn" style="margin-top:12px; padding:12px; background: var(--accent-color);" onclick="advanceLevel()">Advance Matrix</button>
+                <button class="menu-btn" id="next-lvl-btn" style="margin-top:12px; padding:12px; background: var(--accent-color);" onclick="advanceLevel()">Next Level</button>
             </div>
         </div>
     </div>
@@ -215,7 +215,7 @@
             <p id="evaluation-rating" style="font-size: 0.95rem; font-style: italic; color: var(--text-muted); line-height: 1.6;"></p>
         </div>
 
-        <button class="menu-btn" style="background: var(--border-color);" onclick="resetMatrixGame()">🔄 Re-initialize Matrix Terminal</button>
+        <button class="menu-btn" style="background: var(--border-color);" onclick="resetMatrixGame()">🔄 Challenge the Model Again</button>
     </div>
 
     <script>
@@ -225,7 +225,7 @@
         const matrixDataset = {
             1: {
                 title: "Diagnostic Layer: Alpha-10",
-                objective: "Isolate a challenge verifying specific literal code phrases spoken directly within the environment data stream.",
+                objective: "Find a question that asks about the exact words spoken out loud in the video.",
                 required_audio: true,
                 required_video: false,
                 options: [
@@ -233,40 +233,40 @@
                         id: "A", 
                         text: "What room number does Lincoln say has a talkative patient?", 
                         is_correct: true, 
-                        explanation: "Relies completely on capturing the audio waveform data token '305'.",
+                        explanation: "This depends entirely on picking up the "305" sound from the audio.",
                         responses: {
-                            VisionBot: "I see a man talking, but there are no room numbers written visibly on his clothing or walls. I guess Room 101.",
-                            AudioBot: "The subject explicitly states: 'Patient in 305 is a bit of a talker.' Response: Room 305.",
-                            FusionBot: "Audio log isolates '305' as the active target identifier. Response: Room 305."
+                            VisionBot: "I see a man talking, but there are no room numbers on his clothes or the walls, so I guess Room 101.",
+                            AudioBot: "I hear the subject say, "Patient in 305 is a bit of a talker," so I identify the location as Room 305.",
+                            FusionBot: "I isolate "305" from the audio log as the correct identifier and confirm the location is Room 305."
                         }
                     },
                     { 
                         id: "B", 
                         text: "What color scrubs is Lincoln wearing while standing in the corridor?", 
                         is_correct: false, 
-                        explanation: "Requires tracking on-screen pixel data, which doesn't challenge the intended text track requirement.",
+                        explanation: "This only checks visual data, so it fails to test the required text analysis.",
                         responses: {
-                            VisionBot: "The man in the scene is wearing dark blue/navy medical scrubs.",
-                            AudioBot: "The dialogue track contains words like 'rounds' and 'patient' but no mention of color words. Unable to answer.",
-                            FusionBot: "Visual analysis identifies dark blue medical scrubs."
+                            VisionBot: "I see the man is wearing dark blue or navy medical scrubs.",
+                            AudioBot: "I hear words like "rounds" and "patient," but since there is no mention of color, I cannot answer the question.",
+                            FusionBot: "I use visual data to confirm the man is wearing dark blue medical scrubs."
                         }
                     },
                     { 
                         id: "C", 
                         text: "How does Lincoln react physically when Daisy speaks to him?", 
                         is_correct: false, 
-                        explanation: "Requires kinetic motion tracking coefficients.",
+                        explanation: "This needs data on tracking objects.",
                         responses: {
-                            VisionBot: "The male subject stops movement, shifts his gaze down, and his facial muscles tighten into an expression of surprise.",
-                            AudioBot: "I detect the voice track changing volume and tone, but cannot isolate spatial physical responses.",
-                            FusionBot: "The system registers physical freezing and structural jaw tension matching defensive posture."
+                            VisionBot: "I see the man freeze, look down, and tighten his face in surprise.",
+                            AudioBot: "I hear a change in his voice's volume and tone, but I cannot see his body language.",
+                            FusionBot: "I confirm the man has frozen and his jaw is tensed, indicating a defensive posture."
                         }
                     }
                 ]
             },
             2: {
                 title: "Diagnostic Layer: Beta-20",
-                objective: "Isolate a challenge testing static physical structures or environmental barriers currently blocking spatial lanes.",
+                objective: "Find a question that asks about unchanging physical objects or barriers (like walls, doors, or blocks) that are in the way.",
                 required_audio: false,
                 required_video: true,
                 options: [
@@ -274,21 +274,21 @@
                         id: "A", 
                         text: "What warning does Daisy give Lincoln regarding the Inhumans transition?", 
                         is_correct: false, 
-                        explanation: "Requires parsing the spoken conversational audio stream.",
+                        explanation: "This needs to process and interpret the spoken audio.",
                         responses: {
-                            VisionBot: "A woman with dark hair is moving her lips expressively, but no text overlays are visible on screen.",
-                            AudioBot: "The speaker states: 'No one is better at helping these people transition than you.' Warning context: it's not a gift, it's a curse.",
-                            FusionBot: "Audio signals track conversational warning text regarding Inhuman transition criteria."
+                            VisionBot: "I see a dark-haired woman moving her lips expressively, but there is no on-screen text.",
+                            AudioBot: "I hear the speaker say, "No one is better at helping these people transition than you," and warn that it is a curse, not a gift.",
+                            FusionBot: "I use the audio to identify the conversation as a warning about the criteria for "Inhuman" transition."
                         }
                     },
                     { 
                         id: "B", 
                         text: "What physical barrier does Lincoln slide to reveal Daisy hiding inside the room?", 
                         is_correct: true, 
-                        explanation: "Directly tests the pipeline's ability to identify structural transformations on screen.",
+                        explanation: "This directly checks the system's ability to spot physical changes happening on the screen.",
                         responses: {
-                            VisionBot: "The subject reaches out and pulls back a hanging fabric medical privacy curtain on overhead metal rollers.",
-                            AudioBot: "I hear a metallic friction sliding sound effect, but cannot determine what physical asset is being manipulated.",
+                            VisionBot: "I see the subject pull a fabric medical privacy curtain along an overhead metal track.",
+                            AudioBot: "I hear a metallic friction sliding sound effect, but cannot determine what object is being manipulated.",
                             FusionBot: "Visual pixels identify a light-colored sliding partition curtain deployed on a ceiling guide rail."
                         }
                     },
@@ -296,7 +296,7 @@
                         id: "C", 
                         text: "What is the background noise track right before the sliding door opens?", 
                         is_correct: false, 
-                        explanation: "Isolates ambient frequency metadata rather than the structural properties of the scene.",
+                        explanation: "This focuses on background sound data instead of the physical layout of the scene.",
                         responses: {
                             VisionBot: "The video frame shows a hallway floor. I cannot process sound frequencies.",
                             AudioBot: "Low frequency HVAC ventilation drone mixed with distant hospital electronic monitor hums.",
@@ -307,7 +307,7 @@
             },
             3: {
                 title: "Diagnostic Layer: Gamma-30",
-                objective: "Isolate a challenge mapping psychological fluctuations, interpersonal state shifts, and behavioral reactions.",
+                objective: "Find a question that asks about mood changes, emotional shifts, or how people react to each other.",
                 required_audio: true,
                 required_video: true,
                 options: [
@@ -315,7 +315,7 @@
                         id: "A", 
                         text: "Does Lincoln's speech pitch sound happy or sad during his initial nurse interaction?", 
                         is_correct: false, 
-                        explanation: "Only measures localized acoustic parameters, completely bypassing facial response frames.",
+                        explanation: "This only measures specific sound data, ignoring the visual cues of facial expressions entirely.",
                         responses: {
                             VisionBot: "The subject smiles faintly for 1.2 seconds before turning. Visual indicates casual neutrality.",
                             AudioBot: "Acoustic analysis shows upward inflection frequency variance indicative of casual/lighthearted banter.",
@@ -328,8 +328,8 @@
                         is_correct: true, 
                         explanation: "Requires connecting spatial target recognition directly with immediate vocal tone adjustments.",
                         responses: {
-                            VisionBot: "Facial micro-expressions show widened eyes and dropped brows (Shock/Alarm), but missing vocal severity metrics.",
-                            AudioBot: "Vocal frequency drops into a harsh, staccato rasp ('What are you doing here?'). Sentiment: High irritation, missing visual confirmation.",
+                            VisionBot: "Facial micro-expressions show widened eyes and dropped brows (Shock/Alarm), but I lack information about his voice.",
+                            AudioBot: "Vocal frequency drops into a harsh, staccato rasp ('What are you doing here?'). Sentiment: High irritation, but I lack visual confirmation",
                             FusionBot: "Cross-modal alignment captures both the visual eye-widening surprise and the instant vocal drop into cold hostility. State: Shock transitioning instantly into defensive anger."
                         }
                     },
@@ -340,7 +340,7 @@
                         explanation: "Measures static environmental properties with zero cognitive or behavioral value.",
                         responses: {
                             VisionBot: "Spatial framing identifies exactly 3 rectangular fluorescent lighting fixtures embedded in the ceiling panels.",
-                            AudioBot: "Ceiling layouts are not referenced in the audio track metadata stream.",
+                            AudioBot: "The audio contains no information about the ceiling layout. I'm guessing 2.",
                             FusionBot: "Image framework counts 3 overhead corridor lighting banks."
                         }
                     }
@@ -348,7 +348,7 @@
             },
             4: {
                 title: "Diagnostic Layer: Delta-40",
-                objective: "Isolate a challenge verifying overlapping timelines, step progression, and the causal order of distinct events.",
+                objective: "Find a question that asks about the order of events, step-by-step progress, or what happens before and after an action.",
                 required_audio: true,
                 required_video: true,
                 options: [
@@ -356,21 +356,21 @@
                         id: "A", 
                         text: "What does Daisy discuss immediately after Lincoln asserts his heritage should die?", 
                         is_correct: false, 
-                        explanation: "Checks plain string memorization inside text scripts without tracking action overlap.",
+                        explanation: "This only checks if the text was memorized, without tracking how it aligns with the characters' physical actions.",
                         responses: {
-                            VisionBot: "The characters remain static in conversation frame. No physical actions distinguish the transition.",
+                            VisionBot: "The characters are standing still during the conversation; there is no physical movement to highlight the transition.",
                             AudioBot: "Transcript logs show Lincoln stating 'let it die,' followed immediately by Daisy replying: 'You're not walking out of here...'",
-                            FusionBot: "Audio transcript traces direct timeline statement progression: Heritage → Escape prevention text."
+                            FusionBot: ": I confirm the audio timeline shows a progression: Heritage → Escape prevention."
                         }
                     },
                     { 
                         id: "B", 
                         text: "Does Mack move to physically block the doorway before or after Lincoln states he is no longer taking orders?", 
                         is_correct: true, 
-                        explanation: "Forces the system to index spatial positioning updates alongside ongoing auditory command streams over time.",
+                        explanation: "This forces the system to map physical movement and spatial positioning in relation to spoken commands over a specific timeline.",
                         responses: {
-                            VisionBot: "The large male figure steps directly into the portal frame opening at timestamp 0:58, but I do not know what words triggered this move.",
-                            AudioBot: "I hear the line 'I'm not taking orders from anyone anymore' at 1:03, but I do not have structural coordinates to determine when the physical block happened.",
+                            VisionBot: "At timestamp 0:58, the large male figure steps into the portal, but I cannot identify the verbal cue that prompted this.",
+                            AudioBot: "I hear the line 'I'm not taking orders from anyone anymore' at 1:03, but I do not have anchors to determine when the event happened.",
                             FusionBot: "Causality alignment confirms Mack initiates the physical frame block at 0:58, *before* Lincoln delivers his definitive verbal refusal line at 1:03."
                         }
                     },
@@ -378,18 +378,18 @@
                         id: "C", 
                         text: "Who walks into the hospital room layout first at the very beginning of the video?", 
                         is_correct: false, 
-                        explanation: "A simple isolated start-point visual check that carries zero conversational dependency.",
+                        explanation: "This is a basic visual check of the starting point that does not rely on any conversation or dialogue.",
                         responses: {
                             VisionBot: "The female nurse in patterned attire is the initial moving entity tracking into the corridor frame.",
-                            AudioBot: "Footstep sound frequencies begin at 0:01, but individual speaker paths cannot be differentiated.",
-                            FusionBot: "Video track isolates the nurse entering the corridor zone first."
+                            AudioBot: "Footstep sound frequencies begin at 0:01, but exact speaker cannot be differentiated. I'm guessing it was Daisy.",
+                            FusionBot: "Video track confirms the nurse entering the corridor zone first."
                         }
                     }
                 ]
             },
             5: {
                 title: "Diagnostic Layer: Epsilon-50",
-                objective: "Isolate a challenge linking an abstract symbolic word spoken in the dialogue to a database entity not explicitly present in the room pixels.",
+                objective: "Find a question that connects a spoken nickname or code word to a real object or concept that cannot be seen anywhere in the video.",
                 required_audio: true,
                 required_video: true,
                 options: [
@@ -397,21 +397,21 @@
                         id: "A", 
                         text: "What specific object is Lincoln referring to when he aggressively mentions 'that damn rock'?", 
                         is_correct: true, 
-                        explanation: "Forces the network to associate an spoken language asset with external operational file intelligence.",
+                        explanation: "This forces the network to link a spoken phrase to external data, identifying its true meaning rather than taking it literally.",
                         responses: {
-                            VisionBot: "The room contains hospital beds, charts, and curtains. There are no geological stones or rocks visible in the room pixel space.",
-                            AudioBot: "The phrase 'that damn rock' implies a physical stone object discussed in past context, but no physical description is found in speech patterns.",
-                            FusionBot: "Contextual grounding links the audio token 'damn rock' to the alien Kree Monolith artifact previously tracked by the SHIELD operations database. It is a spatial reference, not a literal stone in the room."
+                            VisionBot: "The room contains hospital beds, charts, and curtains. But I cannot find the rock or any round object.",
+                            AudioBot: "The phrase 'that damn rock' implies a physical stone object discussed in past context, but provides no physical description, making the object's identity unclear from the audio alone.",
+                            FusionBot: "I have grounded the context by linking "damn rock" to the alien Kree Monolith artifact from the SHIELD operations database, confirming it is a reference to a specific entity rather than a physical stone present in the scene."
                         }
                     },
                     { 
                         id: "B", 
                         text: "How many times is the exact word 'rock' verbalized across the clip timeline?", 
                         is_correct: false, 
-                        explanation: "Standard internal frequency analysis on text logs without any external reference linking.",
+                        explanation: "This performs a standard analysis of the text logs by counting the frequency of a word, without connecting it to any external knowledge or broader context.",
                         responses: {
-                            VisionBot: "Lips move, but I do not have phoneme tracking capabilities to count word frequencies.",
-                            AudioBot: "Lexical scan confirms the explicit string token 'rock' occurs exactly 1 time at timestamp 0:00:27.",
+                            VisionBot: "Lips move, but I do not have phoneme tracking capabilities to count word frequencies. Maybe two times?",
+                            AudioBot: "A lexical scan confirms that the word "rock" is spoken exactly once at the 0:00:27 timestamp.",
                             FusionBot: "Audio token count registers exactly one iteration of the target word."
                         }
                     },
@@ -419,10 +419,10 @@
                         id: "C", 
                         text: "Is the rock physically inside the hospital room setup during this scene?", 
                         is_correct: false, 
-                        explanation: "A simple spatial checklist task that doesn't test semantic or symbolic meaning association.",
+                        explanation: "This is a basic spatial audit task used to verify the physical presence of an object without needing to understand its significance or meaning.",
                         responses: {
                             VisionBot: "Visual bounding box check returns zero instances of geological material or stone blocks in the room coordinates.",
-                            AudioBot: "Dialogue establishes the rock is toxic/lethal, but offers no coordinates regarding its current global deployment station.",
+                            AudioBot: "Dialogue establishes the rock is toxic/lethal, it provides no information regarding its current location or deployment.",
                             FusionBot: "Cross-referencing confirms the object is absent from the immediate room frame."
                         }
                     }
@@ -430,7 +430,7 @@
             },
             6: {
                 title: "Diagnostic Layer: Zeta-60",
-                objective: "Isolate a challenge testing precise time-stamp synchronization between a sudden structural sound cue and an instant physical reaction.",
+                objective: "Find a question that tests the exact timing match between a sudden sound effect and a person's immediate physical movement in response to it.",
                 required_audio: true,
                 required_video: true,
                 options: [
@@ -438,7 +438,7 @@
                         id: "A", 
                         text: "What text is written on the medical charts when the scene shifts to the desktop?", 
                         is_correct: false, 
-                        explanation: "Standard spatial character reading task without any required timeframe synchronization constraints.",
+                        explanation: "This is a straightforward question of reading text present in the environment; it does not require timing or synchronization with other audio or visual events.",
                         responses: {
                             VisionBot: "OCR text detection reads blurred printed layout lines on a medical folder clip document.",
                             AudioBot: "Text characters are not read aloud on the vocal audio channel track.",
@@ -460,10 +460,10 @@
                         id: "C", 
                         text: "What argument topic does Daisy address right as she sits down?", 
                         is_correct: false, 
-                        explanation: "Monitors generic semantic flow rather than sharp, high-frequency physical synchronization triggers.",
+                        explanation: "This monitors the general flow of the conversation and the narrative, rather than focusing on precise, millisecond-accurate physical triggers.",
                         responses: {
-                            VisionBot: "The female subject lowers her spatial position onto a furniture asset while talking.",
-                            AudioBot: "Dialogue track outlines objections concerning Monolith safety thresholds and transition protocols.",
+                            VisionBot: "The female subject sits on the bed while talking.",
+                            AudioBot: "The dialogue focuses on concerns regarding Monolith safety thresholds and the established transition protocols but I can't see Daisy sit down.",
                             FusionBot: "Audio logs trace the transition discussion happening as the visual frame displays her moving into a seated position."
                         }
                     }
@@ -471,17 +471,17 @@
             },
             7: {
                 title: "Diagnostic Layer: Omega-70",
-                objective: "Isolate a complex verification task where the omission of either input layer renders the solution mathematically unresolvable.",
+                objective: "Find a question that is impossible to answer unless you use both video and audio together. If either one is missing, you cannot solve it.",
                 required_audio: true,
                 required_video: true,
                 options: [
                     { 
                         id: "A", 
-                        text: "What exact words are spoken by Mack right as he stares down Lincoln?", 
+                        text: "What is the exact last word spoken in the audio track of this clip?", 
                         is_correct: false, 
-                        explanation: "Can be parsed entirely via isolated text transcripts without processing on-screen configurations.",
+                        explanation: "This question can be fully resolved by analyzing the text transcript alone, without needing to process any visual cues or on-screen actions.",
                         responses: {
-                            VisionBot: "The large male character moves his mouth while looking at Lincoln, but no caption text is available.",
+                            VisionBot: "The large male character moves his mouth while looking at Lincoln, but I can't hear the word.",
                             AudioBot: "Vocal profile tracks the deep male voice stating: 'You're not walking out of here till my partner is set peace.'",
                             FusionBot: "Audio logs record the explicit confrontation phrase delivered at that timestamp sequence."
                         }
@@ -568,7 +568,7 @@
                 
                 if (m === "FusionBot") {
                     pass = absoluteSuccess;
-                    textOut = absoluteSuccess ? chosenOption.responses.FusionBot : "CRITICAL ALIGNMENT FAIL: Incoming evaluation flags do not match pipeline constraints. Processing abandoned.";
+                    textOut = absoluteSuccess ? chosenOption.responses.FusionBot : "CRITICAL ALIGNMENT FAIL: Incoming evaluation flags do not match needed constraints. Processing abandoned.";
                 } else if (m === "VisionBot") {
                     pass = videoChecked && !audioChecked && questionCorrect;
                     textOut = videoChecked ? chosenOption.responses.VisionBot : "INSUFFICIENT DATA TRACES: Video channel input toggled off. Frame reading impossible.";
@@ -606,10 +606,10 @@
                 
                 diagnosisReport = "<span style='color:var(--accent-error); font-weight:bold;'>ALIGNMENT ANOMALY DETECTED:</span> [Yield Penalty: -25 credits]<br>";
                 if (!questionCorrect) {
-                    diagnosisReport += `- The chosen question strategy doesn't target the core layer requirement for this diagnostic layer profile.<br>`;
+                    diagnosisReport += `- The chosen question strategy doesn't target the requirement for this level.<br>`;
                 }
                 if (!modalitiesCorrect) {
-                    diagnosisReport += `- Look closely at the simulated model outputs! Your checked data layer configurations are breaking the engines' data dependencies.<br>`;
+                    diagnosisReport += `- Look closely at the simulated model outputs! Your mute and screen selections are breaking the engines' data dependencies.<br>`;
                 }
                 document.getElementById('next-lvl-btn').classList.add('hidden');
             }
@@ -634,9 +634,9 @@
 
             let rating = "";
             if (gameState.score === 700) {
-                rating = "Perfect Evaluation. Flawless structural matching across all matrix coordinates. Director Coulson notes your analytical proficiency is clear — welcome to Level 7 access.";
+                rating = "Perfect Evaluation. Flawless structural matching across all challenge levels. Director Coulson notes your analytical proficiency is clear — welcome to Level 7 access.";
             } else if (gameState.score >= 500) {
-                rating = "Optimal Validation Performance. Minor disruption anomalies logged during pipeline conversion steps, but overall system parameters remained inside balanced stabilization boundaries.";
+                rating = "Optimal Validation Performance. Minor disruption anomalies logged during challenge execution, but overall system parameters remained inside balanced stabilization boundaries.";
             } else {
                 rating = "Baseline Clearance Approved. Pipeline telemetry secured, though significant diagnostic feedback interference loops were registered. Suggest reviewing alignment prerequisites before next terminal cycle.";
             }
